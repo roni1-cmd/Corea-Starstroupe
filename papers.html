@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corea Starstroupe - Research Paper Archive</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+        .logo-main {
+            font-size: 30px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .logo-sub {
+            font-size: 14px;
+            font-weight: 400;
+            color: #999;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .logo img {
+            width: 52px;
+            height: 52px;
+            margin-right: 12px;
+            border-radius: 8px;
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: flex-end;
+        }
+        .search-bar {
+            max-width: 360px;
+            width: 100%;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            color: #fff;
+            background: #1c1c1c;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            transition: background 0.2s ease;
+        }
+        .search-bar input:focus {
+            background: #222;
+        }
+        .dropdown-container {
+            position: relative;
+            max-width: 160px;
+            width: 100%;
+        }
+        .filter-dropdown {
+            width: 100%;
+            padding: 12px 32px 12px 16px;
+            font-size: 16px;
+            color: #fff;
+            background: #1c1c1c;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        .filter-dropdown:focus, .filter-dropdown:hover {
+            background: #333;
+        }
+        .dropdown-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            pointer-events: none;
+        }
+        .article {
+            max-width: 900px;
+            margin: 140px auto 80px;
+            padding: 0 32px;
+            text-align: left;
+        }
+        .article h1 {
+            font-size: clamp(36px, 6vw, 52px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.7;
+            color: #bbb;
+            font-weight: 400;
+            margin-bottom: 32px;
+            text-align: justify;
+        }
+        .paper-list {
+            list-style: none;
+            margin: 24px 0;
+        }
+        .paper-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 24px 0;
+            background: transparent;
+            transition: transform 0.3s ease;
+        }
+        .paper-item:hover {
+            transform: translateY(-2px);
+        }
+        .paper-logo {
+            width: 48px;
+            height: 48px;
+            margin-right: 20px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+        .paper-content {
+            flex: 1;
+        }
+        .paper-title {
+            font-size: clamp(20px, 2.5vw, 22px);
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .paper-title a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .paper-title a:hover {
+            color: #ccc;
+        }
+        .paper-meta {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #999;
+            margin-bottom: 12px;
+        }
+        .paper-description {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #bbb;
+            line-height: 1.6;
+            text-align: justify;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #333, transparent);
+            margin: 16px 0;
+        }
+        .no-results {
+            font-size: clamp(16px, 2vw, 18px);
+            color: #bbb;
+            text-align: center;
+            margin: 48px 0;
+            display: none;
+        }
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 48px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: #777;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.03;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .controls {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                justify-content: center;
+            }
+            .search-bar, .dropdown-container {
+                max-width: 100%;
+            }
+            .logo-main {
+                font-size: 26px;
+            }
+            .logo-sub {
+                font-size: 13px;
+            }
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+            .article {
+                margin: 160px auto 60px;
+                padding: 0 20px;
+            }
+            .article h1 {
+                font-size: clamp(30px, 5vw, 40px);
+            }
+            .paper-item {
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            .paper-logo {
+                margin-bottom: 16px;
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .logo-main {
+                font-size: 22px;
+            }
+            .logo-sub {
+                font-size: 12px;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            .article {
+                margin: 140px auto 48px;
+                padding: 0 16px;
+            }
+            .article h1 {
+                font-size: clamp(26px, 5vw, 34px);
+            }
+            .paper-title {
+                font-size: clamp(18px, 2.5vw, 20px);
+            }
+            .paper-meta, .paper-description {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+            .paper-item {
+                padding: 16px 0;
+            }
+            .filter-dropdown {
+                font-size: 14px;
+                padding: 10px 28px 10px 12px;
+            }
+            .dropdown-icon {
+                right: 8px;
+            }
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+            <div class="controls">
+                <div class="dropdown-container">
+                    <select class="filter-dropdown" id="filterDropdown">
+                        <option value="all">All</option>
+                        <option value="auralis">Auralis</option>
+                        <option value="peachi">Peachi</option>
+                        <option value="nexora">Nexora</option>
+                        <option value="general">General</option>
+                    </select>
+                    <span class="material-icons dropdown-icon">arrow_drop_down</span>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search by title, author, or date..." />
+                </div>
+            </div>
+        </header>
+
+        <article class="article">
+            <h1>Corea Starstroupe Research Paper Archive</h1>
+            <p>The Corea Starstroupe Research Paper Archive, a curated collection of our open-source contributions in natural language processing, embedded AI, and human-computer interaction.</p>
+            
+            <ul class="paper-list" id="paperList">
+                <li class="paper-item" data-category="general">
+                    <img src="Credits.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-jun2023.html">Intentional Systems: Designing Computational Frameworks for Human Purpose Alignment</a></div>
+                        <div class="paper-meta">Ron Asnahon, June 2023</div>
+                        <div class="paper-description">Explores computational frameworks designed to align AI systems with human intentions, focusing on ethical and purposeful interaction models.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="nexora">
+                    <img src="Nexora.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-nov2023.html">Nexora Proto v0.1: Foundational Build of a Compact NLP Stack for Resource-Constrained Devices</a></div>
+                        <div class="paper-meta">Ron Asnahon, November 2023</div>
+                        <div class="paper-description">Details the initial development of Nexora Proto, a sub-million-parameter NLP model optimized for microcontrollers, with focus on tokenization and embedding stability.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="nexora">
+                    <img src="Nexora.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-dec2023.html">NeuroLite-4M: A Compact Small Language Model for Real-Time Edge Processing</a></div>
+                        <div class="paper-meta">Ron Asnahon, December 2023</div>
+                        <div class="paper-description">Introduces NeuroLite-4M, a compact language model designed for real-time NLP tasks on edge devices, emphasizing low-latency inference.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="general">
+                    <img src="Credits.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-feb2024.html">Semantic Presence: A Framework for Emotionally and Spatially Aware Human-Computer Interaction</a></div>
+                        <div class="paper-meta">Ron Asnahon, February 2024</div>
+                        <div class="paper-description">Proposes a framework for enhancing human-computer interaction through emotionally and spatially aware interfaces, leveraging semantic context.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="peachi">
+                    <img src="Corea OS.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-mar2024.html">PEACHI OS: Foundational Implementation for Natural Language Processing Workloads</a></div>
+                        <div class="paper-meta">Ron Asnahon, March 2024</div>
+                        <div class="paper-description">Outlines the foundational implementation of PEACHI OS, a lightweight operating system for NLP workloads, with focus on microkernel modularity and token scheduling.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="nexora">
+                    <img src="Nexora.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-apr2024.html">Nexora NeuroLite v0.6.2: Stabilization and Optimization for Embedded NLP Platforms</a></div>
+                        <div class="paper-meta">Ron Asnahon, April 2024</div>
+                        <div class="paper-description">Presents the stabilization phase of Nexora NeuroLite v0.6.2, with enhancements in training compression, scheduling, and vector integrity for embedded NLP.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="nexora">
+                    <img src="Nexora.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-may2024.html">Nexora Neurolite v1.0: Architectural Evolution for Lightweight NLP on Embedded Devices</a></div>
+                        <div class="paper-meta">Ron Asnahon, May 2024</div>
+                        <div class="paper-description">Chronicles the evolution from Nexora Proto to Neurolite v1.0, a production-ready model for embedded NLP with improved compression and instruction tuning.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="auralis">
+                    <img src="Auralis.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-jul2024.html">Auralis v0.1: A Compact NLP Model for Lightweight Instruction-Following and Real-Time Comprehension</a></div>
+                        <div class="paper-meta">Ron Asnahon, July 2024</div>
+                        <div class="paper-description">Documents the initial development of Auralis v0.1, a compact NLP model for instruction-following and dialog intent extraction, with focus on interpretability.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="peachi">
+                    <img src="Corea OS.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-aug2024.html">Intent Vector System: A Computational Framework for Real-Time User Intent Modeling in Peachi OS</a></div>
+                        <div class="paper-meta">Ron Asnahon, August 2024</div>
+                        <div class="paper-description">Introduces a computational framework for real-time user intent modeling within PEACHI OS, enhancing conversational intelligence.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="peachi">
+                    <img src="Corea OS.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-oct2024.html">PEACHI OS: Adaptive Kernel Computation for Conversational Intelligence</a></div>
+                        <div class="paper-meta">Ron Asnahon, October 2024</div>
+                        <div class="paper-description">Details advancements in PEACHI OS’s adaptive kernel for conversational AI, focusing on dynamic computation for real-time dialogue.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="general">
+                    <img src="Credits.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-dec2024.html">Adaptive Cognitive Interfaces: The Lumen Layer Framework in Project Mindmesh</a></div>
+                        <div class="paper-meta">Ron Asnahon, December 2024</div>
+                        <div class="paper-description">Explores the Lumen Layer framework in Project Mindmesh, enabling adaptive cognitive interfaces for enhanced user interaction.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="auralis">
+                    <img src="Auralis.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-jan2025.html">Auralis: A Next-Generation Small Language Model for Nuanced NLP in Resource-Constrained Environments</a></div>
+                        <div class="paper-meta">Ron Asnahon, January 2025</div>
+                        <div class="paper-description">Presents Auralis as a next-generation NLP model for nuanced tasks in low-resource settings, building on prior Auralis developments.</div>
+                    </div>
+                </li>
+                <hr>
+                <li class="paper-item" data-category="general">
+                    <img src="Credits.png" alt="Logo" class="paper-logo" />
+                    <div class="paper-content">
+                        <div class="paper-title"><a href="Paper-may2025.html">Project Mindmesh: The Lumen Layer – A Perceptual Operating System Architecture</a></div>
+                        <div class="paper-meta">Ron Asnahon, May 2025</div>
+                        <div class="paper-description">Details the Lumen Layer in Project Mindmesh, a perceptual OS architecture for advanced human-computer interaction.</div>
+                    </div>
+                </li>
+            </ul>
+            <p class="no-results" id="noResults">No papers found matching your search or filter criteria.</p>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256/sd.mp4?s=51e7c0b6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved. As a non-profit organization, we are dedicated to open-source AI innovation. Donations support our research and charitable initiatives.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterDropdown = document.getElementById('filterDropdown');
+        const paperList = document.getElementById('paperList');
+        const noResults = document.getElementById('noResults');
+        const paperItems = paperList.getElementsByClassName('paper-item');
+
+        // Update paper visibility based on search and filter
+        function updatePaperVisibility() {
+            const query = searchInput.value.trim().toLowerCase();
+            const activeFilter = filterDropdown.value;
+            let hasVisible = false;
+
+            for (const item of paperItems) {
+                const title = item.querySelector('.paper-title').textContent.toLowerCase();
+                const meta = item.querySelector('.paper-meta').textContent.toLowerCase();
+                const description = item.querySelector('.paper-description').textContent.toLowerCase();
+                const category = item.getAttribute('data-category');
+
+                const matchesSearch = title.includes(query) || meta.includes(query) || description.includes(query);
+                const matchesFilter = activeFilter === 'all' || category === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = 'flex';
+                    hasVisible = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            }
+
+            noResults.style.display = hasVisible ? 'none' : 'block';
+        }
+
+        // Search input handler
+        searchInput.addEventListener('input', updatePaperVisibility);
+
+        // Filter dropdown handler
+        filterDropdown.addEventListener('change', updatePaperVisibility);
+    </script>
+</body>
+</html>

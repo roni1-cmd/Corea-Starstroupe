@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroLite-4M: A Compact Small Language Model for Real-Time Edge Processing</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article .math {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ddd;
+            margin: 12px 0;
+            padding-left: 20px;
+            border-left: 2px solid #444;
+        }
+
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+
+            .article table th, .article table td {
+                padding: 6px;
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>NeuroLite-4M: A Compact Small Language Model for Real-Time Edge Processing</h1>
+            <p class="author-date">Ron Asnahon, December 2023</p>
+            
+            <h2>Abstract</h2>
+            <p>This paper details the foundational research behind Nexora AI’s initial prototype: a compact, energy-efficient small language model (SLM) designed for real-time edge processing and scalable intent detection. Built upon lightweight transformer variants and quantized inference strategies, Nexora introduces a minimal architecture named NeuroLite-4M, capable of high-throughput semantic inference with just 4 million parameters. The paper includes architectural blueprints, early benchmarks, and theoretical justifications for low-complexity natural language understanding.</p>
+            
+            <h2>1. Introduction</h2>
+            <p>Large-scale NLP models often demand significant computational resources, making them impractical for edge devices or privacy-sensitive applications. Nexora AI, a project under COREA Starstroupe’s open-source initiative, develops NeuroLite-4M, a small language model (SLM) optimized for speed, efficiency, and cognitive compression. Designed for intent detection, query classification, and semantic entity extraction, NeuroLite-4M operates with minimal resources, supporting COREA Starstroupe’s mission to advance accessible human-machine interaction.</p>
+            
+            <h2>2. Model Architecture Overview</h2>
+            <h3>2.1 Base Configuration</h3>
+            <p>NeuroLite-4M is defined by:</p>
+            <ul>
+                <li><strong>Parameter Count:</strong> 4 million</li>
+                <li><strong>Architecture Type:</strong> Transformer Lite (6 layers, 8 heads, embedding dim = 128)</li>
+                <li><strong>Token Limit:</strong> 256</li>
+                <li><strong>Vocabulary:</strong> 16,384 BPE tokens</li>
+            </ul>
+            
+            <h3>2.2 Layer Composition</h3>
+            <p>Each transformer block consists of:</p>
+            <ul>
+                <li>LayerNorm → Self-Attention (multi-head) → Dropout (p=0.1)</li>
+                <li>LayerNorm → Feed Forward (128→512→128)</li>
+            </ul>
+            <p>The attention mechanism employs Linformer-style key compression, reducing complexity from O(n²) to O(n), where n is sequence length.</p>
+            
+            <h2>3. Quantization Strategy</h2>
+            <p>Weights are quantized to 8-bit integers using symmetric per-tensor quantization for deployment on low-power CPUs and microcontrollers.</p>
+            <h3>3.1 Quantization Function</h3>
+            <p class="math">Q(w) = round(w / s) * s, s = max(|w|) / 127</p>
+            <p>This minimizes distortion and is applied post-training. Quantization reduced model size from 14.5MB to 3.8MB and improved inference speed by 42% on ARM Cortex-A72.</p>
+            
+            <h2>4. Training Regime</h2>
+            <h3>4.1 Corpus Composition</h3>
+            <p>The training corpus comprises:</p>
+            <ul>
+                <li>2.1 million short English queries</li>
+                <li>Domains: finance, weather, education, social, informal Q&A</li>
+                <li>Tokenized with SentencePiece BPE</li>
+            </ul>
+            
+            <h3>4.2 Objective</h3>
+            <p>Masked Language Modeling (MLM) with 15% token masking per sequence.</p>
+            
+            <h3>4.3 Optimization</h3>
+            <p>Training parameters:</p>
+            <ul>
+                <li><strong>Optimizer:</strong> AdamW</li>
+                <li><strong>Batch size:</strong> 512</li>
+                <li><strong>Learning rate:</strong> 3e-4 with cosine decay</li>
+                <li><strong>Training time:</strong> 48 hours on 1 A100 GPU (shared)</li>
+            </ul>
+            <p>Loss converged after 120k steps:</p>
+            <p class="math">L = -Σ log P(w<sub>i</sub> | w<sub>1</sub>, ..., w<sub>i-1</sub>)</p>
+            
+            <h2>5. Intent Detection via Latent Embedding</h2>
+            <p>Final token embeddings h<sub>L</sub> are extracted and mean-pooled:</p>
+            <p class="math">h<sub>pool</sub> = (1/n) Σ h<sub>L,i</sub></p>
+            <p>A 3-layer intent classifier is applied:</p>
+            <ul>
+                <li>Dense (128→64) + ReLU</li>
+                <li>Dense (64→16) + ReLU</li>
+                <li>Dense (16→5 intents) + Softmax</li>
+            </ul>
+            <p>Early benchmarks:</p>
+            <table>
+                <tr>
+                    <th>Task</th>
+                    <th>Accuracy</th>
+                </tr>
+                <tr>
+                    <td>Binary Intent Match</td>
+                    <td>91.2%</td>
+                </tr>
+                <tr>
+                    <td>Multi-class Intent ID</td>
+                    <td>84.5%</td>
+                </tr>
+                <tr>
+                    <td>Semantic Clustering</td>
+                    <td>78.3%</td>
+                </tr>
+            </table>
+            <p>Intent classes: query, command, question, affirmation, cancellation.</p>
+            
+            <h2>6. Energy Efficiency Analysis</h2>
+            <h3>6.1 Compute Profile (per 100 inferences)</h3>
+            <p>Performance on Raspberry Pi 4:</p>
+            <ul>
+                <li><strong>Runtime:</strong> 0.98s total</li>
+                <li><strong>Peak RAM:</strong> 73MB</li>
+                <li><strong>Energy Draw:</strong> ~0.11 Wh</li>
+            </ul>
+            <p>Compared to distilled BERT:</p>
+            <ul>
+                <li>3.2× faster</li>
+                <li>4.7× less energy</li>
+            </ul>
+            
+            <h2>7. Conclusion and Next Steps</h2>
+            <p>NeuroLite-4M, developed under COREA Starstroupe’s Nexora AI, demonstrates the efficacy of small language models in constrained environments, supporting ambient intent recognition and privacy-first applications. Future work in 2024 will focus on multilingual support, context memory, and task-specific fine-tuning, advancing COREA Starstroupe’s open-source mission.</p>
+            
+            <h2>Appendix: Layer Weight Distribution (Truncated)</h2>
+            <table>
+                <tr>
+                    <th>Layer</th>
+                    <th>Mean Weight</th>
+                    <th>Std Dev</th>
+                    <th>Max Weight</th>
+                    <th>Min Weight</th>
+                </tr>
+                <tr>
+                    <td>L1</td>
+                    <td>0.034</td>
+                    <td>0.122</td>
+                    <td>0.98</td>
+                    <td>-0.91</td>
+                </tr>
+                <tr>
+                    <td>L4</td>
+                    <td>0.029</td>
+                    <td>0.087</td>
+                    <td>0.76</td>
+                    <td>-0.66</td>
+                </tr>
+                <tr>
+                    <td>L6</td>
+                    <td>0.031</td>
+                    <td>0.113</td>
+                    <td>0.82</td>
+                    <td>-0.73</td>
+                </tr>
+            </table>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Corea STARSTROUPE Internal Model Architecture Sheets. (2023). Nexora AI Specifications.</li>
+                <li>Nexora AI Pretraining Logs – Build NL-4M-Alpha. (2023). COREA Starstroupe.</li>
+                <li>Vaswani, A., et al. (2017). Attention Is All You Need. <em>Advances in Neural Information Processing Systems</em>.</li>
+                <li>Wu, Y., et al. (2019). Quantization for Efficient Inference of Deep Neural Networks. <em>arXiv preprint arXiv:1910.05488</em>.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

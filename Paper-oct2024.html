@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEACHI OS: Adaptive Kernel Computation for Conversational Intelligence</title>
+   <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article .math {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ddd;
+            margin: 12px 0;
+            padding-left: 20px;
+            border-left: 2px solid #444;
+        }
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .logo-main {
+                font-size: 28px;
+            }
+            .logo-sub {
+                font-size: 14px;
+            }
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .logo-main {
+                font-size: 24px;
+            }
+            .logo-sub {
+                font-size: 12px;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+            .article table th, .article table td {
+                padding: 6px;
+            }
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>PEACHI OS: Adaptive Kernel Computation for Conversational Intelligence</h1>
+            <p class="author-date">Ron Asnahon, October 2024</p>
+            
+            <h2>Abstract</h2>
+            <p>PEACHI (Programmable Embedded Architecture for Conversational Hybrid Intelligence) OS is a context-adaptive, low-latency operating system optimized for small AI workloads. This paper presents the core scheduler design, memory synchronization heuristics, and direct hardware-layer token routing pipelines engineered for small-scale models such as Nexora and Auralis. The October 2024 build introduces embedded semantic flags (ESFs), real-time vector heap compaction, and neuroreactive task rescheduling. PEACHI balances power consumption, linguistic threading, and semantic state buffering to meet the demands of neural NLP agents at the edge.</p>
+            
+            <h2>1. Architecture Overview</h2>
+            <p>PEACHI’s design philosophy centers on neural-centric task management, stateless-to-stateful transition routing, and non-blocking I/O for AI-first latency constraints, supporting COREA Starstroupe’s mission for efficient human-machine interaction.</p>
+            
+            <h3>1.1 Scheduler</h3>
+            <p>Features:</p>
+            <ul>
+                <li>Token-driven quantum scheduler</li>
+                <li>Adaptive slice window: <span class="math">w(t) = α * log(1 + |∇I(t)|)</span></li>
+                <li>Prioritization based on intention gradient <span class="math">∇I(t)</span></li>
+            </ul>
+            <p><strong>Solution:</strong> For intention gradient norm |∇I(t)| = 1.5, α = 0.2:</p>
+            <p class="math">w(t) = 0.2 * log(1 + 1.5) = 0.2 * log(2.5) ≈ 0.2 * 0.9163 = 0.1833 ms</p>
+            
+            <h3>1.2 Kernel Loop Flow</h3>
+            <p>Steps:</p>
+            <ul>
+                <li><strong>Register:</strong> NLP event triggers token wake cycle.</li>
+                <li><strong>Fetch:</strong> Decode pre-embedded ESF.</li>
+                <li><strong>Compute:</strong> Dispatch lightweight Transformer-core or logic tree.</li>
+                <li><strong>Flush:</strong> Vector queue & memory rebalancer.</li>
+            </ul>
+            
+            <h2>2. Computation Pipeline</h2>
+            <h3>2.1 Token-Level Flow Stack</h3>
+            <p>Components:</p>
+            <ul>
+                <li><strong>Entry Handler:</strong> Filters event context → vector translation.</li>
+                <li><strong>ESF Activator:</strong> Checks memory page priority.</li>
+                <li><strong>Token Heap Mapper:</strong> Applies heap schedule <span class="math">H(t) = Σ p<sub>i</sub> * v<sub>i</sub></span>.</li>
+                <li><strong>Low-Energy Compute Thread:</strong> Reduces noise gates & run quantum bound.</li>
+                <li><strong>Exit Watcher:</strong> Flags expired token vector groups.</li>
+            </ul>
+            
+            <h3>2.2 Heap Compaction Strategy</h3>
+            <p>Multi-pass semantic vector defragmentation with contextual importance weighted buffer eviction:</p>
+            <p class="math">E(v) = w<sub>c</sub> * C(v) + w<sub>t</sub> * T(v)</p>
+            <p><strong>Solution:</strong> For vector v, contextual score C(v) = 0.8, temporal score T(v) = 0.3, weights w<sub>c</sub> = 0.7, w<sub>t</sub> = 0.3:</p>
+            <p class="math">E(v) = 0.7 * 0.8 + 0.3 * 0.3 = 0.56 + 0.09 = 0.65</p>
+            <p>Result: 23% latency drop in Nexora AI inference chains (from 10.5ms to 8.1ms).</p>
+            
+            <h2>3. System Metrics and Energy Profiling</h2>
+            <p>Performance metrics:</p>
+            <table>
+                <tr>
+                    <th>Operation</th>
+                    <th>Avg Latency (ms)</th>
+                    <th>Energy Use (Wh)</th>
+                    <th>Heap Fragmentation %</th>
+                </tr>
+                <tr>
+                    <td>NLP Task Decode (Auralis)</td>
+                    <td>10.2</td>
+                    <td>0.084</td>
+                    <td>6.3%</td>
+                </tr>
+                <tr>
+                    <td>ESF Mapping (NeuroLite)</td>
+                    <td>8.1</td>
+                    <td>0.069</td>
+                    <td>4.9%</td>
+                </tr>
+                <tr>
+                    <td>Heap Compaction Pass (3-step)</td>
+                    <td>4.4</td>
+                    <td>0.031</td>
+                    <td>1.8%</td>
+                </tr>
+            </table>
+            
+            <h2>4. Compatibility</h2>
+            <p>Supported configurations:</p>
+            <ul>
+                <li><strong>Architectures:</strong> ARMv8, x86-64e, RISC-V</li>
+                <li><strong>Memory Models:</strong> Linear Vector Buffer Stack (LVBS), Token Shared Segment Memory (TSSM)</li>
+                <li><strong>Max Model Size:</strong> Up to 20M parameter models (quantized or full-float)</li>
+            </ul>
+            
+            <h2>5. Future Directions</h2>
+            <p>Planned enhancements:</p>
+            <ul>
+                <li>Hardware-embedded intention gradient buffers</li>
+                <li>ESF acceleration unit (Q2 2025)</li>
+                <li>Adaptive latency bonding via live semantic entropy sensing</li>
+            </ul>
+            
+            <h2>6. Conclusion</h2>
+            <p>PEACHI OS, developed by COREA Starstroupe, is a next-generation operating system optimized for AI-centric computation at the edge. By abstracting natural language flow, it provides an efficient kernel for hybrid cognition, supporting models like Nexora and Auralis, and advancing COREA Starstroupe’s open-source mission.</p>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Corea Nexora Build Papers. (2023–2024). Internal Documentation.</li>
+                <li>Joint NLP Runtime Stack Forum. (2024). Technical Proceedings.</li>
+                <li>STARSTROUPE OS Architecture Notes. (2024). COREA Starstroupe.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

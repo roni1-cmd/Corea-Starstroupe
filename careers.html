@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starstroupe Careers</title>
+    <link rel="icon" href="Credits.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background: #000;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            z-index: 1000;
+            flex-wrap: wrap;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header .logo .logo-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: #fff;
+        }
+
+        .nav .apply-btn {
+            color: #fff;
+            background: #3F9FFF;
+            padding: 6px 18px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .nav .apply-btn:hover {
+            background: #2a8cff;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .job-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .job-image {
+            flex: 0 0 400px;
+            width: 400px;
+            height: 400px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .job-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            transition: opacity 0.3s ease;
+        }
+
+        .job-image img.fade {
+            opacity: 0;
+        }
+
+        .job-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .job-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+        }
+
+        .job-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .job-details {
+            flex: 1;
+        }
+
+        .job-name {
+            color: #888;
+            font-size: 18px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .job-position {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 4px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .job-socials {
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon {
+            color: #888;
+            font-size: 20px;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            color: #fff;
+        }
+
+        .nothing-follows {
+            font-size: 12px;
+            color: #666;
+            font-weight: 300;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+            margin: 30px 0;
+        }
+
+        .careers-section {
+            margin-top: 40px;
+        }
+
+        .careers-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #3F9FFF;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3F9FFF;
+        }
+
+        .job-listing {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .job-listing:hover {
+            border-color: #3F9FFF;
+            background: rgba(63, 159, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .job-listing-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .job-listing-desc {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .job-listing-details {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 12px;
+            display: none; /* Hidden by default */
+            transition: all 0.3s ease;
+        }
+
+        .job-listing-details.active {
+            display: block; /* Show when active */
+        }
+
+        .job-listing-details h4 {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .job-listing-details ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .job-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .job-item:hover {
+            padding: 20px 25px;
+            transform: translateX(5px);
+        }
+
+        .job-item:hover .job-name {
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .job-item:hover .job-position {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .job-item:hover .job-socials {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .job-item:nth-child(1):hover {
+            border-color: #9C4DFF;
+            background: rgba(156, 77, 255, 0.05);
+            box-shadow: 0 0 20px rgba(156, 77, 255, 0.2);
+        }
+
+        .job-item:nth-child(2):hover {
+            border-color: #FF4D9C;
+            background: rgba(255, 77, 156, 0.05);
+            box-shadow: 0 0 20px rgba(255, 77, 156, 0.2);
+        }
+
+        .job-item:nth-child(3):hover {
+            border-color: #FF2EB2;
+            background: rgba(255, 46, 178, 0.05);
+            box-shadow: 0 0 20px rgba(255, 46, 178, 0.2);
+        }
+
+        .job-item:nth-child(4):hover {
+            border-color: #FF76B2;
+            background: rgba(255, 118, 178, 0.05);
+            box-shadow: 0 0 20px rgba(255, 118, 178, 0.2);
+        }
+
+        .job-item:nth-child(5):hover {
+            border-color: #6A00FF;
+            background: rgba(106, 0, 255, 0.05);
+            box-shadow: 0 0 20px rgba(106, 0, 255, 0.2);
+        }
+
+        .team-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .dropdown-toggle {
+            display: inline-flex;
+            align-items: center;
+            color: #3F9FFF;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-toggle:hover {
+            color: #2a8cff;
+        }
+
+        .dropdown-toggle i {
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .footer {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .main {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .job-image {
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            .job-item:hover {
+                transform: none;
+                padding: 15px 20px;
+            }
+
+            .job-socials {
+                opacity: 1;
+                transform: translateX(0);
+                margin-top: 10px;
+            }
+
+            .job-position {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="Credits.png" alt="STARSTROUPE Logo">
+            <span class="logo-text">STARSTROUPE | CAREERS</span>
+        </div>
+        <nav class="nav">
+            <a href="#">FAQ</a>
+            <a href="papers.html">PAPERS</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="job-list">
+            <h2 class="team-title">The Team Behind It</h2>
+            <div class="job-item">
+                <div class="job-details">
+                    <div class="job-name" data-image="GRAD.png">Ron Asnahon</div>
+                    <div class="job-position">Founder & CEO</div>
+                </div>
+                <div class="job-socials">
+                    <a href="https://github.com/ron-asnahon" class="social-icon" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://facebook.com/ron.asnahon" class="social-icon" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com/ron_asnahon" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="job-item">
+                <div class="job-details">
+                    <div class="job-name" data-image="Arpay.jpeg">Carl John Arpay</div>
+                    <div class="job-position">Co-Founder & CTO</div>
+                </div>
+                <div class="job-socials">
+                    <a href="https://github.com/carl-john-arpay" class="social-icon" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://facebook.com/carl.john.arpay" class="social-icon" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com/carl_john_arpay" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="nothing-follows">
+                ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ <br>
+                NOTHING FOLLOWS
+            </div>
+        </div>
+        <div class="job-image">
+            <img src="GRAD.png" alt="Job Image" id="jobImage">
+        </div>
+    </main>
+
+    <div class="divider"></div>
+
+    <section class="careers-section" style="max-width: 1200px; margin: 0 auto; padding: 0 30px;">
+        <h2 class="careers-title">Open Positions</h2>
+        
+        <div class="category">
+            <h3 class="category-title">Engineering</h3>
+            <div class="job-listing">
+                <div class="job-listing-title">Junior Frontend Developer</div>
+                <div class="job-listing-desc">Join our dynamic team to build responsive and user-friendly web applications using modern frontend technologies in a collaborative startup environment.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Develop and maintain responsive web interfaces using React, HTML, CSS, and JavaScript.</li>
+                        <li>Collaborate with designers and backend developers to implement new features.</li>
+                        <li>Optimize web applications for performance and accessibility.</li>
+                        <li>Participate in code reviews and agile development processes.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Basic understanding of React, HTML, CSS, and JavaScript.</li>
+                        <li>Familiarity with responsive design principles.</li>
+                        <li>Strong problem-solving skills and eagerness to learn.</li>
+                        <li>Recent graduates or self-taught developers welcome.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Flexible remote work environment.</li>
+                        <li>Mentorship from experienced developers.</li>
+                        <li>Opportunities for career growth in a fast-paced startup.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Remote</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Full-time</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+            <div class="job-listing">
+                <div class="job-listing-title">Backend Developer Intern</div>
+                <div class="job-listing-desc">Gain hands-on experience building robust APIs and server-side applications using Node.js, Express, and modern databases in a supportive startup setting.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Assist in developing and maintaining server-side applications and APIs.</li>
+                        <li>Work with databases like MongoDB or PostgreSQL to manage data.</li>
+                        <li>Support the team in debugging and optimizing backend systems.</li>
+                        <li>Contribute to technical documentation and testing.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Basic knowledge of Node.js, Express, or similar backend frameworks.</li>
+                        <li>Understanding of RESTful API design principles.</li>
+                        <li>Enthusiasm for learning and teamwork.</li>
+                        <li>Current students or recent graduates preferred.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Hands-on experience with real-world projects.</li>
+                        <li>Flexible hybrid work arrangement.</li>
+                        <li>Opportunity to transition to a full-time role.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Hybrid</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Internship</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h3 class="category-title">Design & Product</h3>
+            <div class="job-listing">
+                <div class="job-listing-title">UI/UX Designer</div>
+                <div class="job-listing-desc">Design intuitive and visually appealing user interfaces for our web platform, perfect for creative individuals looking to make an impact.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Create wireframes, prototypes, and high-fidelity designs using tools like Figma or Adobe XD.</li>
+                        <li>Conduct user research to inform design decisions.</li>
+                        <li>Collaborate with developers to ensure design fidelity in implementation.</li>
+                        <li>Iterate on designs based on user feedback and testing.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Proficiency in design tools like Figma, Sketch, or Adobe XD.</li>
+                        <li>Basic understanding of user-centered design principles.</li>
+                        <li>Strong portfolio showcasing UI/UX work (student projects acceptable).</li>
+                        <li>Recent graduates or career changers encouraged to apply.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Fully remote work with flexible hours.</li>
+                        <li>Creative freedom to shape our platform’s user experience.</li>
+                        <li>Access to design mentorship and learning resources.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Remote</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Full-time</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+            <div class="job-listing">
+                <div class="job-listing-title">Product Assistant</div>
+                <div class="job-listing-desc">Support the product team in developing features, conducting user research, and shaping the product roadmap in a fast-growing startup.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Assist in defining product requirements and user stories.</li>
+                        <li>Conduct user interviews and analyze feedback to inform product decisions.</li>
+                        <li>Coordinate with cross-functional teams to ensure timely feature delivery.</li>
+                        <li>Monitor product performance and suggest improvements.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Strong organizational and communication skills.</li>
+                        <li>Interest in product management and user experience.</li>
+                        <li>Ability to work in a fast-paced, collaborative environment.</li>
+                        <li>No prior experience required; enthusiasm is key.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Hybrid work model with flexible scheduling.</li>
+                        <li>Exposure to end-to-end product development.</li>
+                        <li>Pathway to product management roles.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Hybrid</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Full-time</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h3 class="category-title">Marketing & Growth</h3>
+            <div class="job-listing">
+                <div class="job-listing-title">Social Media Coordinator</div>
+                <div class="job-listing-desc">Build and engage our online community by creating compelling social media content and strategies for growth.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Manage social media accounts across platforms like Instagram, Twitter, and LinkedIn.</li>
+                        <li>Create and schedule engaging posts, stories, and campaigns.</li>
+                        <li>Analyze social media metrics to optimize content performance.</li>
+                        <li>Collaborate with the marketing team on brand initiatives.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Familiarity with social media platforms and content creation tools.</li>
+                        <li>Strong written and visual communication skills.</li>
+                        <li>Creative mindset with attention to detail.</li>
+                        <li>Experience with social media (personal or professional) is a plus.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Remote work with flexible part-time hours.</li>
+                        <li>Creative control over social media strategy.</li>
+                        <li>Opportunities to grow into a full-time marketing role.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Remote</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Part-time</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+            <div class="job-listing">
+                <div class="job-listing-title">Marketing Intern</div>
+                <div class="job-listing-desc">Dive into startup marketing by supporting campaigns, creating content, and conducting market research for our growing brand.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Assist in developing and executing marketing campaigns.</li>
+                        <li>Create blog posts, newsletters, and promotional materials.</li>
+                        <li>Conduct market research to identify trends and opportunities.</li>
+                        <li>Support the marketing team in daily tasks and reporting.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Strong interest in marketing and content creation.</li>
+                        <li>Excellent written and verbal communication skills.</li>
+                        <li>Ability to multitask and work independently.</li>
+                        <li>Current students or recent graduates preferred.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Hands-on marketing experience in a startup environment.</li>
+                        <li>Flexible hybrid work schedule.</li>
+                        <li>Mentorship from experienced marketing professionals.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Hybrid</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Internship</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h3 class="category-title">Operations & Support</h3>
+            <div class="job-listing">
+                <div class="job-listing-title">Customer Support Representative</div>
+                <div class="job-listing-desc">Provide exceptional support to our users, resolve issues, and gather feedback to help improve our platform.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Respond to user inquiries via email, chat, and social media.</li>
+                        <li>Troubleshoot user issues and escalate complex cases.</li>
+                        <li>Document user feedback to inform product improvements.</li>
+                        <li>Maintain a positive and professional tone in all interactions.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Strong communication and problem-solving skills.</li>
+                        <li>Empathy and patience in handling user concerns.</li>
+                        <li>Basic familiarity with web-based platforms.</li>
+                        <li>Prior customer support experience is a plus but not required.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Fully remote work environment.</li>
+                        <li>Opportunities to influence product development.</li>
+                        <li>Supportive team and comprehensive training.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> Remote</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Full-time</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+            <div class="job-listing">
+                <div class="job-listing-title">Operations Assistant</div>
+                <div class="job-listing-desc">Support the backbone of our startup by coordinating team activities and streamlining operational processes.</div>
+                <div class="dropdown-toggle"><i class="material-icons">expand_more</i> Show Details</div>
+                <div class="job-listing-details">
+                    <h4>Responsibilities:</h4>
+                    <ul>
+                        <li>Coordinate schedules, meetings, and team events.</li>
+                        <li>Manage internal documentation and process workflows.</li>
+                        <li>Assist in onboarding new team members.</li>
+                        <li>Identify opportunities to improve operational efficiency.</li>
+                    </ul>
+                    <h4>Qualifications:</h4>
+                    <ul>
+                        <li>Strong organizational and multitasking skills.</li>
+                        <li>Excellent communication and interpersonal abilities.</li>
+                        <li>Comfortable working in an on-site environment.</li>
+                        <li>No prior experience required; proactive attitude is key.</li>
+                    </ul>
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>Exposure to startup operations and management.</li>
+                        <li>Collaborative and dynamic work environment.</li>
+                        <li>Opportunities for career advancement.</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span><i class="material-icons" style="font-size: 14px;">location_on</i> On-site</span>
+                    <span><i class="material-icons" style="font-size: 14px;">schedule</i> Full-time</span>
+                    <span><i class="material-icons" style="font-size: 14px;">work</i> Entry level</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 Corea Starstroupe. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const jobImage = document.getElementById('jobImage');
+        const jobItems = document.querySelectorAll('.job-item');
+        let activeItem = null;
+
+        jobItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (activeItem !== item) {
+                    jobImage.classList.add('fade');
+                    setTimeout(() => {
+                        const jobName = item.querySelector('.job-name');
+                        jobImage.src = jobName.getAttribute('data-image');
+                        jobImage.classList.remove('fade');
+                    }, 300);
+                    activeItem = item;
+                }
+            });
+        });
+
+        document.querySelectorAll('.social-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        });
+
+        document.querySelectorAll('.job-listing').forEach(listing => {
+            const toggle = listing.querySelector('.dropdown-toggle');
+            const details = listing.querySelector('.job-listing-details');
+
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent job-listing click event
+                const isActive = details.classList.contains('active');
+                details.classList.toggle('active');
+                toggle.classList.toggle('active');
+                toggle.innerHTML = isActive 
+                    ? `<i class="material-icons">expand_more</i> Show Details`
+                    : `<i class="material-icons">expand_less</i> Hide Details`;
+            });
+
+            listing.addEventListener('click', (e) => {
+                // Only trigger if not clicking the dropdown toggle
+                if (!e.target.closest('.dropdown-toggle')) {
+                    const jobTitle = listing.querySelector('.job-listing-title').textContent;
+                    console.log(`Applied to: ${jobTitle}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

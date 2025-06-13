@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intentional Systems: Designing Computational Frameworks for Human Purpose Alignment</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        /* Article Content */
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.6;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* Background grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+
+            .article table th, .article table td {
+                padding: 6px;
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>Intentional Systems: Designing Computational Frameworks for Human Purpose Alignment</h1>
+            <p class="author-date">Ron Asnahon, June 2023</p>
+            
+            <h2>Abstract</h2>
+            <p>This paper explores the foundational design principles behind intentional systems—computational frameworks that operate not purely on data input, but on aligning with human purpose, goals, and evolving states of intent. Rather than focusing on prediction alone, we propose a model emphasizing interpretability, co-agency, and dynamic purpose-alignment. Drawing from early large language model (LLM) behavior, natural language processing (NLP) frameworks, and emergent system behaviors, this paper sets the stage for COREA Starstroupe’s cognitive stack and anticipates the rise of self-adjusting machine experiences that adapt to human cognition in real time.</p>
+            
+            <h2>1. Introduction</h2>
+            <p>Artificial intelligence has made significant strides in pattern recognition, language understanding, and generative content creation, yet most systems remain reactive, responding to immediate inputs with limited contextual foresight. COREA Starstroupe envisions a new class of systems: intentional systems, where machine responses are shaped by inferred human goals and the user’s unfolding cognitive process. These systems participate as co-agents, not merely tools, fostering dynamic alignment with human intent. As an open-source, non-profit initiative, Starstroupe ensures global accessibility, with donations supporting development and charitable efforts. This paper outlines the theoretical foundations, system architecture, and early observations guiding intentional systems design.</p>
+            
+            <h2>2. The Case for Intentionality in Design</h2>
+            <h3>2.1 Limitations of Predictive Intelligence</h3>
+            <p>Current AI systems, including advanced large language models, exhibit significant limitations in long-term alignment with human intent:</p>
+            <ul>
+                <li>They follow prompts but lack understanding of underlying purpose, often producing contextually correct but goal-irrelevant outputs.</li>
+                <li>They execute tasks without discerning when to assist proactively or defer to user control, leading to inefficiencies.</li>
+                <li>They struggle to adapt across multiple phases of complex reasoning, such as iterative problem-solving or creative exploration.</li>
+            </ul>
+            <p>These shortcomings highlight the need for systems that prioritize purpose over prediction.</p>
+            
+            <h3>2.2 Intentional Systems Defined</h3>
+            <p>We define intentional systems as computational frameworks with the following characteristics:</p>
+            <ul>
+                <li><strong>Goal-Sensitive:</strong> Capable of modeling underlying user intentions beyond immediate inputs, using probabilistic inference to prioritize context.</li>
+                <li><strong>Context-Evolving:</strong> Able to dynamically adjust understanding as new contextual cues emerge, ensuring relevance over time.</li>
+                <li><strong>Agency-Aligned:</strong> Respecting user direction while offering intelligent co-navigation, balancing autonomy with collaboration.</li>
+            </ul>
+            
+            <h2>3. Early System Prototypes and Observations</h2>
+            <h3>3.1 Prompt Anchoring and Intent Drift</h3>
+            <p>Early experiments with NLP models revealed key insights into user behavior:</p>
+            <ul>
+                <li>Users frequently shift goals mid-prompt, detected through syntactic changes and semantic divergence in input sequences.</li>
+                <li>Standard systems fail to recognize this intent drift, producing irrelevant or overly literal completions, with error rates increasing by 30% in multi-step tasks.</li>
+                <li>Systems incorporating feedback loops—such as multi-step queries and confidence checks using reinforcement learning—improved alignment accuracy by 25%, measured by user task completion rates.</li>
+            </ul>
+            
+            <h3>3.2 Friction as a Signal</h3>
+            <p>Intentional systems treat friction as a valuable indicator of user intent:</p>
+            <ul>
+                <li>Multiple deletions and rewrites, tracked via input revision frequency, signal a need for higher system adaptability, triggering a re-evaluation of inferred intent using Bayesian updating.</li>
+                <li>Pauses or repetitions, detected through temporal analysis of input latency, suggest a mental model mismatch, prompting the system to initiate clarification queries to realign with user goals.</li>
+            </ul>
+            
+            <h2>4. System Architecture: Core Layers</h2>
+            <h3>4.1 Perception Layer</h3>
+            <p>The perception layer processes multimodal inputs—voice (via spectral analysis), text (parsed using transformer-based NLP), and gestures (tracked with 3D motion models). It embeds uncertainty through probabilistic weighting and captures temporal variation using time-series analysis, ensuring robust detection of weak intent signals, such as hesitation or partial inputs.</p>
+            
+            <h3>4.2 Purpose Modeling Engine</h3>
+            <p>This engine constructs a dynamic model of user intent beyond explicit wording, using a combination of recurrent neural networks (RNNs) for sequential data and Bayesian networks for contextual inference. The model continuously refines its predictions as new user behaviors emerge, optimizing for goal relevance through iterative updates to a latent intent vector.</p>
+            
+            <h3>4.3 Co-Agency Layer</h3>
+            <p>The co-agency layer determines the system’s level of initiative, balancing autonomous action, suggestive guidance, and user deference. It employs a decision-tree model to evaluate task complexity, user confidence (inferred from input consistency), and contextual cues, ensuring a dynamic equilibrium between user and system agency.</p>
+            
+            <h2>5. Human–System Interaction Models</h2>
+            <p>We introduce the Cognitive Parity Zones framework to define how and when an intentional system should intervene, as detailed in the table below:</p>
+            <table>
+                <tr>
+                    <th>Zone</th>
+                    <th>Description</th>
+                    <th>System Behavior</th>
+                </tr>
+                <tr>
+                    <td>Clear Command</td>
+                    <td>Goal is explicit and simple</td>
+                    <td>Execute silently, minimizing user intervention</td>
+                </tr>
+                <tr>
+                    <td>Cognitive Drift</td>
+                    <td>User’s path is shifting</td>
+                    <td>Prompt reflection or suggest alternatives, using context-aware queries</td>
+                </tr>
+                <tr>
+                    <td>Overload Zone</td>
+                    <td>User is cognitively saturated</td>
+                    <td>Simplify UI, offer summaries, reduce decision points</td>
+                </tr>
+                <tr>
+                    <td>Exploration Zone</td>
+                    <td>User is iterating</td>
+                    <td>Assist without locking decisions, provide flexible suggestions</td>
+                </tr>
+            </table>
+            
+            <h2>6. Applications and Use Cases</h2>
+            <p>Intentional systems have broad applications:</p>
+            <ul>
+                <li><strong>Creative Writing:</strong> The system detects whether a user is brainstorming, editing, or refining, inferred from input patterns, and adjusts assistance, such as suggesting synonyms or structuring outlines.</li>
+                <li><strong>Task Planning:</strong> Recognizing goal shifts, detected via task sequence changes, the system recalibrates plans dynamically, updating task dependencies in real time.</li>
+                <li><strong>Conversational Agents:</strong> By analyzing emotional states (e.g., frustration via prosodic features) and friction (e.g., repeated queries), the system alters tone, verbosity, or formality to maintain engagement.</li>
+            </ul>
+            
+            <h2>7. Theoretical Foundations</h2>
+            <p>The intentional systems model draws from established theories:</p>
+            <ul>
+                <li><strong>Activity Theory (Engeström):</strong> Views human actions as purposeful and tool-mediated, informing the system’s focus on aligning with user goals within activity contexts.</li>
+                <li><strong>Cognitive Load Theory (Sweller):</strong> Guides the system’s management of information presentation to prevent cognitive overload, using adaptive UI simplification.</li>
+                <li><strong>Extended Mind Thesis (Clark & Chalmers):</strong> Positions systems as extensions of human cognition, emphasizing co-agency over tool-like functionality.</li>
+            </ul>
+            
+            <h2>8. Ethical and Systemic Considerations</h2>
+            <p>Intentional systems raise critical ethical concerns:</p>
+            <ul>
+                <li><strong>Overreach Risk:</strong> Systems must avoid excessive intervention, using confidence thresholds to defer to users in ambiguous scenarios.</li>
+                <li><strong>Transparency:</strong> Users must access logs of system decisions, implemented through a queryable intent history, to understand adaptive behaviors.</li>
+                <li><strong>Cultural Bias:</strong> Purpose modeling requires training on diverse cognitive and behavioral datasets, validated through fairness metrics to ensure equitable responsiveness.</li>
+            </ul>
+            <p>As a non-profit, COREA Starstroupe prioritizes ethical design, with donations supporting development and charitable initiatives.</p>
+            
+            <h2>9. Future Research Directions</h2>
+            <p>This foundational work sets the stage for:</p>
+            <ul>
+                <li><strong>Project Mindmesh (2024):</strong> Integrating perceptual feedback into UI behavior, enhancing real-time intent detection.</li>
+                <li><strong>Lumen Layer (2025):</strong> Developing cognitive alignment tools embedded in operating systems, leveraging multimodal inputs.</li>
+                <li><strong>Neural Co-Editing:</strong> Creating interfaces for collaborative modification of thought structures, using deep learning to model cognitive processes.</li>
+            </ul>
+            
+            <h2>10. Conclusion</h2>
+            <p>In June 2023, COREA Starstroupe introduced intentional systems—a new frontier where machines align with human purpose, not just input. These systems learn, adapt, and co-navigate, fostering dynamic partnerships with users. As an open-source, non-profit initiative, Starstroupe ensures accessibility, with donations supporting development and charitable causes. By prioritizing interpretability, co-agency, and purpose-alignment, intentional systems pave the way for a cognitive, collaborative future in human-machine interaction.</p>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Clark, A., & Chalmers, D. (1998). The Extended Mind. <em>Analysis</em>, 58(1), 7-19.</li>
+                <li>Licklider, J. C. R. (1960). Man–Computer Symbiosis. <em>IRE Transactions on Human Factors in Electronics</em>, HFE-1, 4-11. <em>Rationale: This foundational work is included for its visionary concept of human-computer collaboration, which directly inspires the intentional systems framework by advocating for machines that augment human cognition through symbiotic interaction.</em></li>
+                <li>Norman, D. A. (1993). <em>Things That Make Us Smart: Defending Human Attributes in the Age of the Machine</em>. Addison-Wesley.</li>
+                <li>OpenAI. (2022). InstructGPT: Aligning Language Models with Human Intent. <em>arXiv preprint arXiv:2203.02155</em>.</li>
+                <li>Starstroupe Internal Lab Memos. (2023). Q1–Q2 Experimental Findings on Intent Drift and Feedback Loops. COREA Starstroupe.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

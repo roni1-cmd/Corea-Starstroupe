@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Presence: A Framework for Emotionally and Spatially Aware Human-Computer Interaction</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        /* Article Content */
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article ul {
+            font-size: clamp(14px, 2vw, 16px);
+            line-height: 1.5;
+            color: #aaa;
+            margin: 16px 0;
+            padding-left: 20px;
+            text-align: justify;
+        }
+
+        .li {
+            margin-bottom: 12px;
+            list-style-type: none;
+        }
+
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 24px;
+            text-align: center;
+            border-top: 2px solid #333;
+            line-height: 1;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 2px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* Background grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255, 0.1) 1px, transparent 1px);
+            background-size: 10px 10px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 24px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+
+            .article p, .article ul {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+
+            .article .author-date {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+
+            .article p, .article ul {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+
+            .article .author-date {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>Semantic Presence: A Framework for Emotionally and Spatially Aware Human-Computer Interaction</h1>
+            <p class="author-date">Ron Asnahon, February 2024</p>
+            
+            <h2>Abstract</h2>
+            <p>This paper presents a new paradigm for natural human-computer interaction: Semantic Presence—a model in which artificial systems interpret not just the literal content of input, but its affective and spatial context. Unlike prior approaches that focus on textual understanding, this framework integrates emotional tone, digital body language, and memory-based anchoring to create experiences that feel emotionally aware and cognitively synchronized. It bridges NLP, affective computing, and lightweight cognition into a single interface model, paving the way for emotionally responsive agents and ambient systems that perceive not just what we say—but how we feel when we say it.</p>
+            
+            <h2>1. Introduction</h2>
+            <p>As language models and virtual agents advance, developed by initiatives like COREA Starstroupe, a gap persists: systems lack authentic emotional presence. While capable of parsing language and simulating tone, they rarely capture the felt experience behind user input. Semantic Presence, a novel framework, addresses this by modeling emotional energy and user focus in digital environments, enabling interfaces that respond with psychological resonance. This paper outlines the problem, framework, applications, and future integration into COREA Starstroupe’s open-source Project Mindmesh.</p>
+            
+            <h2>2. Problem: The Emotional Vacuum of Current Interfaces</h2>
+            <p>Despite expressive outputs, most AI agents fail to:</p>
+            <ul>
+                <li>Detect user frustration or hesitancy, leading to misaligned responses.</li>
+                <li>Understand non-linear conversation, missing shifts in user intent.</li>
+                <li>Adapt interface density to cognitive overload, overwhelming users.</li>
+            </ul>
+            <p>These shortcomings result in interactions that feel robotic, misaligned, or overly enthusiastic, lacking the nuance required for authentic engagement.</p>
+            
+            <h2>3. Core Framework: The Semantic Presence Layer</h2>
+            <p>The Semantic Presence Layer, designed for integration into COREA Starstroupe’s systems, combines three inputs to model user state:</p>
+            
+            <h3>3.1 Emotional Tonality</h3>
+            <p>Employs sentiment analysis (using transformer-based NLP), syntactic irregularity detection, and voice modulation analysis (via prosodic features, if applicable) to infer mood shifts. For example, rapid speech or negative lexical choices trigger a recalibration of response tone, processed through a probabilistic sentiment model.</p>
+            
+            <h3>3.2 Cognitive Proximity Mapping</h3>
+            <p>Measures how “close” a user is to clarity or confusion by analyzing behavioral patterns, such as repeated phrasing (detected via edit distance metrics) or tab toggling (tracked through UI event logs). High friction signals indecision, prompting the system to offer clarifying prompts, optimized via a decision-tree algorithm.</p>
+            
+            <h3>3.3 Digital Spatial Behavior</h3>
+            <p>Monitors cursor movement, dwell time, scroll behavior, and UI interaction heatmaps, processed through spatial clustering algorithms, to infer comfort and engagement zones. For instance, erratic cursor patterns indicate disorientation, triggering UI simplification.</p>
+            <p>These inputs are fused into a live emotional model, updated in real time using a recurrent neural network (RNN) and fed into response selection, UI layout, and feedback cadence.</p>
+            
+            <h2>4. Application Examples</h2>
+            <h3>4.1 Emotion-Adaptive Chat Interfaces</h3>
+            <p>Detecting hesitation or negative tonality (via sentiment scores), the system shifts to neutral, supportive responses. During positive engagement, inferred from lexical positivity, it mirrors energy and increases proactiveness, using a reinforcement learning policy to optimize tone.</p>
+            
+            <h3>4.2 Spatial-Aware Dashboards</h3>
+            <p>UI elements dynamically resize based on attention zones, identified through heatmap analysis. Content fades or simplifies when cognitive overload is detected, triggered by high interaction frequency, using a rule-based state machine.</p>
+            
+            <h3>4.3 Ambient Cognitive Assistants</h3>
+            <p>Operating system-level agents, integrated into COREA Starstroupe’s platforms, dim notifications during high-friction tasks (detected via input latency). They suggest breaks or pace changes when fatigue signals (e.g., prolonged dwell times) are present, managed through a temporal analysis model.</p>
+            
+            <h2>5. Engine Architecture</h2>
+            <p>The Semantic Presence engine comprises three layers:</p>
+            <ul>
+                <li><strong>Signal Layer:</strong> Captures multimodal signals (text, voice, UI interactions) using spectral analysis for audio, NLP for text, and event tracking for behavior, ensuring high-fidelity input data.</li>
+                <li><strong>Fusion Layer:</strong> Combines affective and spatial data into a cohesive user-state vector, using a weighted ensemble model with Kalman filtering to reduce noise and RNNs for temporal integration.</li>
+                <li><strong>Response Engine:</strong> Selects behaviors (linguistic, visual, systemic) based on a psychological resonance policy, implemented via a Markov decision process to balance emotional alignment and task relevance.</li>
+            </ul>
+            
+            <h2>6. Theoretical Grounding</h2>
+            <p>The framework draws on:</p>
+            <ul>
+                <li><strong>Affective Computing (Picard):</strong> Positions emotion as a critical input for computational design, guiding emotional tonality modeling.</li>
+                <li><strong>Embodied Cognition:</strong> Views mental states as grounded in sensory inputs, informing digital spatial behavior analysis.</li>
+                <li><strong>Spatial Semiotics:</strong> Interprets meaning through interface layout and motion, shaping cognitive proximity mapping.</li>
+            </ul>
+            
+            <h2>7. Ethics and Human Factors</h2>
+            <p>Ethical design is central to COREA Starstroupe’s non-profit mission:</p>
+            <ul>
+                <li><strong>Privacy:</strong> Behavioral data is processed transiently on the user’s device, using homomorphic encryption, and never stored without consent.</li>
+                <li><strong>Consent Modes:</strong> Users control Semantic Presence granularity through opt-in settings, accessible via a transparent UI.</li>
+                <li><strong>Bias Risks:</strong> Emotional interpretation models are trained on diverse datasets with regional tuning, validated through fairness metrics to ensure equitable responsiveness.</li>
+            </ul>
+            
+            <h2>8. Looking Ahead: Semantic Presence in Mindmesh</h2>
+            <p>In Project Mindmesh, COREA Starstroupe’s open-source initiative, Semantic Presence will evolve to:</p>
+            <ul>
+                <li>Shape entire layout transitions based on emotional context, using real-time UI adaptation algorithms.</li>
+                <li>Enable co-pilot UIs that adjust vocabulary, visuals, and pace to match mental rhythm, driven by affective state vectors.</li>
+                <li>Create devices that feel emotionally present, enhancing human-machine symbiosis through ambient responsiveness.</li>
+            </ul>
+            
+            <h2>9. Conclusion</h2>
+            <p>Semantic Presence marks a pivotal advancement in human-computer interaction, enabling AI systems that are emotionally and spatially aware. By aligning with users’ felt experiences, developed through COREA Starstroupe’s non-profit efforts, this framework fosters resonance over relevance, redefining interfaces as cognitive partners. As human-machine symbiosis deepens, Semantic Presence will drive the next leap in experience design, creating systems that understand not just what we say, but how we feel.</p>
+            
+            <h2>References</h2>
+            <ul>
+                <li>COREA Starstroupe Labs. (2023). SP Alpha Trials. Q4 Internal Report.</li>
+                <li>Dourish, P. (2001). <em>Where the Action Is: The Foundations of Embodied Interaction</em>. MIT Press.</li>
+                <li>Norman, D. A., & Nielsen, J. (2020). <em>Designing with the Mind in Mind</em>. Morgan Kaufmann.</li>
+                <li>OpenAI. (2023). Behavioral Patterns in API Interactions. Internal Study.</li>
+                <li>Picard, R. W. (1997). <em>Affective Computing</em>. MIT Press.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

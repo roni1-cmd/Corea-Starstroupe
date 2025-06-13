@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Project Mindmesh - COREA Starstroupe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        /* Article Content */
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article ul {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.6;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+
+        .article ul li {
+            margin-bottom: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* Background grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .article p, .article ul {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .article p, .article ul {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>About Project Mindmesh</h1>
+            <p>Project Mindmesh is COREA Starstroupe’s flagship initiative to redefine human-machine interaction by creating a unified, adaptive framework that integrates artificial intelligence, natural language processing, and a purpose-built operating system optimized for cognitive engagement. Unlike traditional interfaces that rely on explicit commands, Mindmesh prioritizes understanding user intent, context, and emotion, enabling systems to respond in a conversational, anticipatory, and human-centric manner. As a non-profit initiative, Project Mindmesh is committed to open-source development, ensuring its technologies are freely accessible to developers and organizations worldwide. All donations received are dedicated to furthering this mission and supporting charitable causes aligned with COREA Starstroupe’s vision of advancing human potential through technology. This ambitious project aims to bridge the gap between human expression and technological execution, fostering seamless interactions across diverse platforms and applications. (This description will be replaced later.)</p>
+            
+            <h2>Vision and Purpose</h2>
+            <p>The vision of Project Mindmesh is to establish an ecosystem where technology intuitively interprets human needs, emotions, and commands, enabling interactions as natural as those between people. By leveraging advanced AI and a modular architecture, Mindmesh seeks to eliminate the friction inherent in conventional interfaces, which often require users to adapt to rigid systems. Instead, Mindmesh empowers systems to adapt to users, learning from their behaviors, preferences, and contexts to deliver personalized and meaningful responses. As a non-profit endeavor, the project is driven by a mission to democratize access to advanced AI technologies, making them available to communities, researchers, and developers through open-source licensing. This ensures that the benefits of Mindmesh are shared globally, fostering innovation and collaboration without commercial barriers. The initiative exists to transform how individuals and organizations engage with technology, from personal productivity to enterprise-scale operations, by creating a fluid, intelligent, and accessible interaction model.</p>
+            
+            <h2>Core Capabilities</h2>
+            <p>Project Mindmesh is designed to enable systems with a range of sophisticated capabilities that redefine interaction paradigms. It interprets multi-modal inputs, including spoken language, gestures, and text, with deep contextual awareness, allowing systems to understand not just what is said but the intent and emotion behind it. The framework responds dynamically to user tone, intent, and real-time situational context, ensuring responses are relevant, empathetic, and tailored to the user’s needs. Mindmesh delivers a conversational user experience that feels intuitive and anticipatory, adapting to individual user patterns over time through continuous learning algorithms. Its scalable architecture supports a wide range of devices, from desktops and mobile platforms to ambient systems, voice-first devices, and emerging technologies like augmented reality (AR) and extended reality (XR). By being open-source, Mindmesh allows developers to customize and extend its capabilities, fostering a global community of contributors who can build upon its foundation to create innovative applications.</p>
+            <ul>
+                <li>Multi-modal input processing for speech, gestures, and text with high-fidelity contextual analysis.</li>
+                <li>Dynamic response generation based on user intent, tone, and environmental context.</li>
+                <li>Scalable architecture supporting diverse platforms, from IoT devices to enterprise systems.</li>
+                <li>Adaptive learning to personalize interactions based on user behavior and preferences.</li>
+                <li>Low-latency processing for real-time, conversational engagement.</li>
+            </ul>
+            
+            <h2>The Lumen Layer</h2>
+            <p>Central to Project Mindmesh is the Lumen Layer, a perceptual interface that serves as the bridge between user expression and system execution. This layer acts as an intelligent translator, transforming raw inputs—such as voice, gestures, or typed commands—into actionable insights that systems can process and respond to effectively. The Lumen Layer is designed to be modular, allowing developers to integrate it into various applications and platforms, from consumer devices to enterprise solutions. It is deeply embedded within COREA Starstroupe’s operating system architecture, enabling seamless compatibility with products like Peachi, Nexora, and Auralis. By prioritizing contextual understanding and adaptability, the Lumen Layer ensures that interactions feel natural and intuitive, reducing the cognitive load on users while enhancing system responsiveness and accuracy. As part of the open-source commitment, the Lumen Layer’s codebase is publicly available, empowering developers to enhance and adapt it for specific use cases, from smart home systems to complex enterprise workflows.</p>
+            
+            <h2>Privacy and Ethical Design</h2>
+            <p>Project Mindmesh is built on a foundation of ethical AI, with user privacy, data sovereignty, and transparency engineered into its core. Recognizing the sensitivity of processing personal inputs like voice, gestures, and behavioral data, Mindmesh employs advanced encryption protocols and decentralized data management to ensure user information remains secure and under their control. Transparent data handling practices are implemented to maintain trust, with clear user communication about how their data is used and protected. As a non-profit, COREA Starstroupe ensures that all data practices align with its mission to serve the public good, with no commercial incentives influencing design decisions. This commitment to privacy extends to every interaction, ensuring that Mindmesh systems operate with integrity and respect for user autonomy, making it a trusted framework for users and developers alike.</p>
+            
+            <h2>Applications and Impact</h2>
+            <p>The applications of Project Mindmesh span a wide range of industries and use cases, reflecting its versatile and transformative potential. In conversational operating systems, Mindmesh enables intuitive, voice-driven interfaces that simplify complex tasks and enhance user productivity. For productivity tools, it powers context-aware digital assistants that anticipate user needs and streamline workflows, improving efficiency in both personal and professional settings. In enterprise environments, Mindmesh supports advanced natural language processing solutions for smart command and control, enabling businesses to automate processes, analyze large datasets, and enhance decision-making with real-time insights. The framework is also poised to revolutionize human-centered interfaces in Internet of Things (IoT), augmented reality (AR), and extended reality (XR) environments, creating immersive and responsive experiences that adapt to user contexts. By being open-source, Mindmesh invites global collaboration, allowing developers to create tailored solutions for diverse fields, from education and healthcare to creative industries and smart infrastructure.</p>
+            
+            <h2>Non-Profit Mission and Open-Source Commitment</h2>
+            <p>As a non-profit initiative, Project Mindmesh is dedicated to advancing human potential through technology without the constraints of commercial interests. The entire framework, including its Lumen Layer and associated technologies, is open-source, with all code and documentation freely available to the global developer community. This approach ensures that Mindmesh remains accessible to individuals, organizations, and communities worldwide, fostering innovation and inclusivity. All donations to Project Mindmesh are used exclusively to support its development and to fund charitable initiatives aligned with COREA Starstroupe’s mission, such as educational programs, technology access initiatives, and research into ethical AI. By prioritizing open access and social impact, Mindmesh aims to create a lasting, positive influence on how technology serves humanity.</p>
+            
+            <h2>Future Potential</h2>
+            <p>Project Mindmesh represents a bold step toward a future where technology seamlessly integrates into human life, not as a tool but as a partner. By combining cutting-edge AI, natural language processing, and a cognitive operating system, Mindmesh paves the way for a new era of intelligent systems that understand and adapt to human needs in real time. COREA Starstroupe envisions Mindmesh as the foundation for a wide range of next-generation products and services, from consumer applications to enterprise solutions, all designed to enhance creativity, productivity, and collaboration. As an open-source project, Mindmesh invites contributions from a global community, ensuring its evolution is driven by diverse perspectives and shared goals. Through its non-profit model and commitment to donating all funds to charitable causes, Project Mindmesh aims to set a new standard for human-machine interaction, making technology more accessible, intuitive, and impactful across the globe.</p>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

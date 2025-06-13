@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How We Train Our Models - Corea Starstroupe</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+        .logo-main {
+            font-size: 30px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .logo-sub {
+            font-size: 14px;
+            font-weight: 400;
+            color: #999;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .logo img {
+            width: 52px;
+            height: 52px;
+            margin-right: 12px;
+            border-radius: 8px;
+        }
+        .article {
+            max-width: 900px;
+            margin: 120px auto 80px;
+            padding: 0 32px;
+            text-align: left;
+        }
+        .article h1 {
+            font-size: clamp(36px, 6vw, 52px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #ddd;
+            margin: 32px 0 16px;
+        }
+        .article h3 {
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 500;
+            color: #ccc;
+            margin: 24px 0 12px;
+        }
+        .article p, .article li {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.7;
+            color: #bbb;
+            font-weight: 400;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+        .article ul, .article ol {
+            margin: 16px 0;
+            padding-left: 32px;
+        }
+        .article a {
+            color: #aaa;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+        .article a:hover {
+            color: #fff;
+        }
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 48px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: #777;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.03;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .logo-main {
+                font-size: 26px;
+            }
+            .logo-sub {
+                font-size: 13px;
+            }
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+            .article {
+                margin: 140px auto 60px;
+                padding: 0 20px;
+            }
+            .article h1 {
+                font-size: clamp(30px, 5vw, 40px);
+            }
+            .article h2 {
+                font-size: clamp(22px, 4vw, 28px);
+            }
+            .article h3 {
+                font-size: clamp(18px, 3vw, 22px);
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .logo-main {
+                font-size: 22px;
+            }
+            .logo-sub {
+                font-size: 12px;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            .article {
+                margin: 120px auto 48px;
+                padding: 0 16px;
+            }
+            .article h1 {
+                font-size: clamp(26px, 5vw, 34px);
+            }
+            .article h2 {
+                font-size: clamp(20px, 4vw, 26px);
+            }
+            .article h3 {
+                font-size: clamp(16px, 3vw, 20px);
+            }
+            .article p, .article li {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="index.html" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>How We Train Our Models and Built Peachi OS</h1>
+            <p>At COREA Starstroupe, a non-profit based in Cebu City, Philippines, we are dedicated to advancing open-source AI innovation. This page outlines the training methodologies for our Auralis and Nexora models and the development process for Peachi OS, as detailed in our <a href="papers.html">research paper archive</a>. Our work emphasizes lightweight, efficient, and interpretable AI solutions for resource-constrained environments and conversational intelligence.</p>
+
+            <h2>Training Auralis: Lightweight and Interpretable NLP</h2>
+            <p>Auralis is a compact natural language processing (NLP) model designed for instruction-following and real-time comprehension in low-resource settings. Our training approach, as documented in our papers, focuses on efficiency and interpretability.</p>
+
+            <h3>Key Techniques</h3>
+            <ul>
+                <li><strong>Compact Architecture:</strong> As described in <a href="Paper-jul2024.html">“Auralis v0.1: A Compact NLP Model” (July 2024)</a>, Auralis v0.1 uses a sub-million-parameter architecture optimized for microcontrollers. We employ a transformer-based design with reduced layers and attention heads to minimize computational overhead.</li>
+                <li><strong>Instruction-Following Fine-Tuning:</strong> We fine-tune Auralis on curated datasets of instruction-dialogue pairs to enhance its ability to extract intent and respond accurately. This process involves supervised learning with human-annotated examples, ensuring clarity in task execution.</li>
+                <li><strong>Interpretability Focus:</strong> The same paper highlights our use of attention visualization techniques to make Auralis’s decision-making transparent, allowing developers to understand how the model processes inputs.</li>
+                <li><strong>Dataset Optimization:</strong> In <a href="Paper-jan2025.html">“Auralis: A Next-Generation Small Language Model” (January 2025)</a>, we discuss using synthetic data augmentation to expand training datasets while maintaining quality. This reduces reliance on large-scale data scraping and ensures ethical data practices.</li>
+                <li><strong>Resource-Constrained Training:</strong> We train Auralis on modest hardware, leveraging quantization techniques (e.g., 8-bit integer weights) to reduce memory usage, making the model deployable on edge devices.</li>
+            </ul>
+
+            <h3>Training Process</h3>
+            <p>Our training pipeline for Auralis involves:
+                <ol>
+                    <li><strong>Data Preparation:</strong> Curating and cleaning datasets of dialogues and instructions, augmented with synthetic examples.</li>
+                    <li><strong>Pre-Training:</strong> Initial training on a general language corpus to establish base linguistic capabilities.</li>
+                    <li><strong>Fine-Tuning:</strong> Task-specific tuning for instruction-following and dialog intent extraction.</li>
+                    <li><strong>Optimization:</strong> Applying quantization and pruning to reduce model size without sacrificing performance.</li>
+                    <li><strong>Evaluation:</strong> Testing on benchmark tasks like intent recognition and response accuracy, with iterative refinement based on interpretability metrics.</li>
+                </ol>
+            </p>
+            <p>These methods ensure Auralis is both powerful and practical for real-world applications, from smart assistants to educational tools.</p>
+
+            <h2>Training Nexora: Compact NLP for Edge Devices</h2>
+            <p>Nexora, including its NeuroLite variants, is designed for real-time NLP on resource-constrained devices like microcontrollers. Our training methodologies, detailed across multiple papers, prioritize low-latency inference and stability.</p>
+
+            <h3>Key Techniques</h3>
+            <ul>
+                <li><strong>Sub-Million-Parameter Models:</strong> As outlined in <a href="Paper-nov2023.html">“Nexora Proto v0.1” (November 2023)</a>, Nexora Proto uses a compact NLP stack with fewer than one million parameters, optimized for tokenization and embedding stability.</li>
+                <li><strong>Low-Latency Inference:</strong> In <a href="Paper-dec2023.html">“NeuroLite-4M: A Compact Small Language Model” (December 2023)</a>, we describe training NeuroLite-4M with distilled datasets to enable real-time processing on edge devices, using techniques like knowledge distillation from larger models.</li>
+                <li><strong>Training Compression:</strong> <a href="Paper-apr2024.html">“Nexora NeuroLite v0.6.2” (April 2024)</a> details enhancements in training compression, such as weight pruning and sparse activations, to reduce computational requirements while maintaining accuracy.</li>
+                <li><strong>Instruction Tuning:</strong> In <a href="Paper-may2024.html">“Nexora Neurolite v1.0” (May 2024)</a>, we introduce advanced instruction tuning to improve task adaptability, using reinforcement learning with human feedback (RLHF) to align outputs with user expectations.</li>
+                <li><strong>Vector Integrity:</strong> We ensure stable embeddings through custom tokenization schemes, reducing drift during inference on low-power hardware.</li>
+            </ul>
+
+            <h3>Training Process</h3>
+            <p>The Nexora training pipeline includes:
+                <ol>
+                    <li><strong>Dataset Distillation:</strong> Creating small, high-quality datasets from larger corpora to reduce training overhead.</li>
+                    <li><strong>Pre-Training:</strong> Building foundational language understanding on general text data.</li>
+                    <li><strong>Knowledge Distillation:</strong> Transferring knowledge from larger models to compact architectures.</li>
+                    <li><strong>Fine-Tuning with RLHF:</strong> Aligning the model with specific NLP tasks using human feedback loops.</li>
+                    <li><strong>Optimization and Deployment:</strong> Applying compression techniques and testing on microcontrollers to ensure low-latency performance.</li>
+                </ol>
+            </p>
+            <p>This approach allows Nexora to power NLP applications in environments with limited computational resources, such as IoT devices and embedded systems.</p>
+
+            <h2>Building Peachi OS: A Lightweight AI Operating System</h2>
+            <p>Peachi OS is a lightweight operating system designed for NLP workloads, emphasizing modularity and conversational intelligence. Our development process, as documented in our papers, reflects a commitment to open-source innovation.</p>
+
+            <h3>Key Development Principles</h3>
+            <ul>
+                <li><strong>Microkernel Modularity:</strong> As detailed in <a href="Paper-mar2024.html">“PEACHI OS: Foundational Implementation” (March 2024)</a>, Peachi OS uses a microkernel architecture to ensure flexibility and scalability. Core components, like token scheduling and memory management, are isolated for stability.</li>
+                <li><strong>Intent Modeling:</strong> In <a href="Paper-aug2024.html">“Intent Vector System” (August 2024)</a>, we introduce a computational framework for real-time user intent modeling, enabling Peachi OS to interpret and respond to user commands dynamically.</li>
+                <li><strong>Adaptive Kernel:</strong> <a href="Paper-oct2024.html">“PEACHI OS: Adaptive Kernel Computation” (October 2024)</a> describes advancements in dynamic computation, allowing the kernel to adjust resource allocation based on conversational demands.</li>
+                <li><strong>Lightweight Design:</strong> Peachi OS is optimized for low-resource environments, using minimal system calls and efficient data structures to support NLP tasks.</li>
+                <li><strong>Open-Source Collaboration:</strong> We develop Peachi OS transparently, releasing code and documentation under open-source licenses to foster community contributions.</li>
+            </ul>
+
+            <h3>Development Process</h3>
+            <p>The creation of Peachi OS involved:
+                <ol>
+                    <li><strong>Architecture Design:</strong> Defining a microkernel structure with modular components for NLP processing, memory management, and user interaction.</li>
+                    <li><strong>Core Implementation:</strong> Building foundational systems, such as token scheduling and intent vector processing, using C and Assembly for performance.</li>
+                    <li><strong>Integration of NLP Models:</strong> Embedding models like Auralis and Nexora to handle conversational tasks, with optimized interfaces for real-time dialogue.</li>
+                    <li><strong>Testing and Refinement:</strong> Conducting rigorous testing on low-power hardware to ensure stability and efficiency, with iterative improvements based on performance metrics.</li>
+                    <li><strong>Documentation and Release:</strong> Publishing detailed documentation and source code to engage the open-source community and support further development.</li>
+                </ol>
+            </p>
+            <p>Peachi OS powers conversational AI applications, from chatbots to voice assistants, with a focus on accessibility and adaptability.</p>
+
+            <h2>Our Commitment to Open-Source AI</h2>
+            <p>At COREA Starstroupe, we believe in transparent, ethical, and accessible AI development. Our training and development processes for Auralis, Nexora, and Peachi OS reflect this mission, prioritizing efficiency, interpretability, and community collaboration. For more technical details, explore our <a href="/research_paper_archive.html">research paper archive</a>, where we share our methodologies and findings openly.</p>
+            <p>If you have questions or wish to contribute, contact us at <a href="mailto:contact@coreastarstroupe.org">contact@coreastarstroupe.org</a>. Join us in advancing AI for the global good!</p>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256/sd.mp4?s=51e7c0b6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms-of-service.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

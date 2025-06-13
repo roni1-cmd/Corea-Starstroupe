@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora Proto v0.1: Foundational Build of a Compact NLP Stack for Resource-Constrained Devices</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article .math {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ddd;
+            margin: 12px 0;
+            padding-left: 20px;
+            border-left: 2px solid #444;
+        }
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .logo-main {
+                font-size: 28px;
+            }
+            .logo-sub {
+                font-size: 14px;
+            }
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .logo-main {
+                font-size: 24px;
+            }
+            .logo-sub {
+                font-size: 12px;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+            .article table th, .article table td {
+                padding: 6px;
+            }
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>Nexora Proto v0.1: Foundational Build of a Compact NLP Stack for Resource-Constrained Devices</h1>
+            <p class="author-date">Ron Asnahon, November 2023</p>
+            
+            <h2>Abstract</h2>
+            <p>This paper details the initial development of Nexora Proto v0.1, COREA Starstroupe’s foundational natural language processing (NLP) stack tailored for resource-constrained environments. Released internally in November 2023, Nexora introduces a compact model with 0.89 million parameters, a frequency-scaled tokenization pipeline, and a loss-scaling optimizer. The architecture prioritizes minimal memory footprints and efficient embeddings to enable NLP on microcontrollers and low-power ARM processors. We present the design philosophy, tokenization system, training regime, quantization experiments, embedding stabilization techniques, and early inference benchmarks, laying the groundwork for future advancements in compression, token prioritization, and instruction tuning.</p>
+            
+            <h2>1. Design Philosophy</h2>
+            <p>Nexora is engineered to operate efficiently on hardware with severe computational and memory constraints, such as microcontrollers and single-core ARM processors. Unlike conventional language models optimized for GPU clusters, Nexora scales downward to fit within a 10MB RAM ceiling while maintaining usable linguistic capabilities. The initial phase focused on three core objectives:</p>
+            <ul>
+                <li>Developing the smallest viable NLP model with robust linguistic priors, capable of basic comprehension and generation tasks.</li>
+                <li>Implementing a deterministic tokenizer with entropy regulation to ensure stable and compact token representations.</li>
+                <li>Creating a context-aware embedding system to capture semantic relationships with minimal drift in low-resource settings.</li>
+            </ul>
+            <p>These goals align with COREA Starstroupe’s non-profit mission to democratize AI through open-source, lightweight solutions for edge devices.</p>
+            
+            <h2>2. Initial Model Architecture</h2>
+            <p>Nexora Proto v0.1 is a lightweight transformer-based model designed for balance between computational efficiency and linguistic performance:</p>
+            <ul>
+                <li><strong>Model:</strong> Nexora Proto v0.1</li>
+                <li><strong>Parameters:</strong> 0.89M (890,000)</li>
+                <li><strong>Hidden Size:</strong> 96</li>
+                <li><strong>Heads:</strong> 3 (multi-head attention)</li>
+                <li><strong>Layers:</strong> 4 transformer blocks</li>
+                <li><strong>Token Limit:</strong> 128 tokens</li>
+                <li><strong>Positional Encoding:</strong> Fixed sinusoidal (non-learnable)</li>
+            </ul>
+            <p>The architecture was selected after extensive experimentation to optimize convergence speed on a subsampled dataset while adhering to a memory footprint of ≤10MB. Each transformer block includes layer normalization, multi-head attention, and a feed-forward network with residual connections. The sinusoidal positional encoding ensures deterministic context awareness without additional parameters, critical for low-memory devices.</p>
+            
+            <h2>3. Tokenization System</h2>
+            <p>Nexora employs a frequency-scaled BytePair Encoding (BPE) variant with entropy clamping to maintain stable token representations. Token entropy H<sub>t</sub> is computed over batches to regulate representation diversity:</p>
+            <p class="math">H<sub>t</sub> = -Σ p(t<sub>i</sub>) * log<sub>2</sub>(p(t<sub>i</sub>))</p>
+            <p>Where:</p>
+            <ul>
+                <li>p(t<sub>i</sub>): Probability of token t<sub>i</sub> in the batch</li>
+                <li>H<sub>t</sub>: Entropy in bits</li>
+            </ul>
+            <p><strong>Solution:</strong> For a batch with tokens [t<sub>1</sub>, t<sub>2</sub>, t<sub>3</sub>] and probabilities p = [0.5, 0.3, 0.2]:</p>
+            <p class="math">H<sub>t</sub> = -(0.5 * log<sub>2</sub>(0.5) + 0.3 * log<sub>2</sub>(0.3) + 0.2 * log<sub>2</sub>(0.2))</p>
+            <p class="math">= -(0.5 * -1 + 0.3 * -1.737 + 0.2 * -2.322) = 0.5 + 0.5211 + 0.4644 ≈ 1.4855 bits</p>
+            <p>If H<sub>t</sub> exceeds 3.5 bits, low-probability token IDs (p(t<sub>i</sub>) < 0.05) are culled for that batch to prevent overfitting to rare tokens. Initial tokenizer vocabulary size is 3,100 tokens, optimized for a multilingual subsampled corpus.</p>
+            
+            <h2>4. Training Regime</h2>
+            <h3>4.1 Dataset and Preprocessing</h3>
+            <p>Training utilized a subsampled multilingual corpus:</p>
+            <ul>
+                <li><strong>Size:</strong> 3.1M sequences (pre-cleaned)</li>
+                <li><strong>Languages:</strong> English, Spanish, French (balanced distribution)</li>
+                <li><strong>Preprocessing:</strong> Lowercasing, punctuation normalization, stop-word retention for context</li>
+            </ul>
+            <p>The corpus was curated to ensure diversity in sentence length (mean: 12 tokens, max: 128 tokens) and semantic complexity, suitable for low-resource NLP tasks.</p>
+            
+            <h3>4.2 Loss Function</h3>
+            <p>A smoothed cross-entropy loss with an adaptive floor was used to stabilize training:</p>
+            <p class="math">L = -Σ [y<sub>i</sub> * log(p<sub>i</sub>)] + λ * max(0, L<sub>floor</sub> - L<sub>current</sub>)</p>
+            <p>Where:</p>
+            <ul>
+                <li>y<sub>i</sub>: True label (one-hot)</li>
+                <li>p<sub>i</sub>: Predicted probability</li>
+                <li>λ: Smoothing factor (0.1)</li>
+                <li>L<sub>floor</sub>: Adaptive loss floor (initially 1.5, adjusted by 0.05 per epoch)</li>
+            </ul>
+            <p><strong>Solution:</strong> For a batch with true labels y = [1, 0, 0], predictions p = [0.7, 0.2, 0.1], L<sub>floor</sub> = 1.5, L<sub>current</sub> = -log(0.7) ≈ 0.3567:</p>
+            <p class="math">L = -log(0.7) + 0.1 * max(0, 1.5 - 0.3567) ≈ 0.3567 + 0.1 * 1.1433 ≈ 0.4710</p>
+            
+            <h3>4.3 Optimization</h3>
+            <p>Training parameters:</p>
+            <ul>
+                <li><strong>Optimizer:</strong> AdamW (β₁=0.9, β₂=0.98, ε=1e-8)</li>
+                <li><strong>Learning Rate:</strong> Linear warm-up over 1,600 steps to 2e-4, cosine decay to 1e-6</li>
+                <li><strong>Batch Size:</strong> 64</li>
+                <li><strong>Sequence Length:</strong> 128</li>
+                <li><strong>Epochs:</strong> 12</li>
+                <li><strong>Hardware:</strong> Single NVIDIA Jetson Nano (4GB RAM, 128-core Maxwell GPU)</li>
+            </ul>
+            
+            <h3>4.4 Loss Convergence</h3>
+            <p>Observed loss convergence (average over validation set):</p>
+            <ul>
+                <li>Step 0: 4.92</li>
+                <li>Step 2,000: 2.78</li>
+                <li>Step 8,000: 1.92</li>
+            </ul>
+            <p>Convergence was achieved at approximately 10,000 steps, with a final validation loss of 1.85, indicating stable learning despite the model’s small size.</p>
+            
+            <h2>5. Quantization Study (Preliminary)</h2>
+            <p>Post-training quantization experiments were conducted to assess model compression feasibility:</p>
+            <ul>
+                <li><strong>INT8 Quantization:</strong> Reduced model size from 3.56MB (float32) to 0.89MB but caused 10–13% degradation in top-1 token accuracy (from 84.1% to 73.2–74.9%).</li>
+                <li><strong>Binary Quantization:</strong> Collapsed core embeddings, resulting in >50% accuracy loss, rendering the model unusable.</li>
+            </ul>
+            <p><strong>Decision:</strong> Float32 weights were retained for production to preserve linguistic fidelity, pending further quantization research.</p>
+            
+            <h2>6. Embedding Dynamics</h2>
+            <p>Embedding drift, a common challenge in small models, was monitored using the L2-norm difference between embeddings at consecutive training steps:</p>
+            <p class="math">D(t) = ||e<sub>i</sub>(t) - e<sub>i</sub>(t-1)||<sub>2</sub></p>
+            <p>Where:</p>
+            <ul>
+                <li>e<sub>i</sub>(t): Embedding of token i at step t</li>
+                <li>D(t): Drift magnitude</li>
+            </ul>
+            <p><strong>Solution:</strong> For embeddings e<sub>i</sub>(t) = [0.3, 0.4], e<sub>i</sub>(t-1) = [0.2, 0.35]:</p>
+            <p class="math">D(t) = sqrt((0.3-0.2)² + (0.4-0.35)²) = sqrt(0.01 + 0.0025) = sqrt(0.0125) ≈ 0.1118</p>
+            <p>Mean drift at 10,000 steps: 0.118 (L2-norm), indicating moderate instability.</p>
+            <p>To mitigate drift, a regularization penalty was introduced:</p>
+            <p class="math">L<sub>reg</sub> = μ * Σ ||e<sub>i</sub>(t) - e<sub>i</sub>(t-1)||<sub>2</sub></p>
+            <p>Where μ = 0.01. This reduced mean drift to 0.092 by step 12,000, improving embedding stability.</p>
+            
+            <h2>7. Inference Metrics (Early Build)</h2>
+            <p>Benchmarked on Raspberry Pi Zero 4 W (64MB RAM, 1GHz quad-core Cortex-A53):</p>
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Baseline</th>
+                </tr>
+                <tr>
+                    <td>Inference Latency</td>
+                    <td>64.2 ms</td>
+                </tr>
+                <td>Peak RAM Usage</td>
+                    <td>48.3 MB</td>
+                </tr>
+                <tr>
+                    <td>Token Accuracy Top-5</td>
+                    <td>85.1%</td>
+                </tr>
+            </table>
+            <p>Inference was tested on a 128-token test set with basic conversational prompts. Latency was dominated by memory access (70%) due to the Pi’s limited DRAM bandwidth. Top-5 accuracy reflects the model’s ability to predict relevant tokens in low-context scenarios.</p>
+            
+            <h2>8. Observations and Limitations</h2>
+            <p>Key challenges identified in the November 2024 build:</p>
+            <ul>
+                <li><strong>Token Entropy Fluctuations</strong> High entropy (H<sub>t</sub> > 4 bits) in some batches led to unstable embeddings for rare tokens, necessitating manual re-weighting of high-frequency tokens.</li>
+                <li><strong>Embedding Collapse</strong> High-frequency tokens occasionally converged to similar vectors, reducing model expressivity. This was partially mitigated by increasing λ in the loss function to 0.15.</li>
+                <li><strong>Layer Normalization Dynamics</strong> Layer norm parameters (γ, β) exhibited oscillatory behavior at batch restarts, causing temporary loss spikes (e.g., +0.3 at epoch 5). A smaller learning rate (1e-5) for norm parameters resolved this.</li>
+                <li><strong>Static Positional Encoding</strong> Fixed sinusoidal encodings limited the model’s ability to generalize to variable-length sequences, reducing contextual reusability in multi-sentence inputs.</li>
+            </ul>
+            
+            <h2>9. Conclusion</h2>
+            <p>Nexora Proto v0.1 establishes a robust foundation for compact NLP on resource-constrained devices, aligning with COREA Starstroupe’s mission to deliver open-source AI solutions. Despite its modest capabilities, the model demonstrates viable performance on microcontrollers, with a stable training pipeline and manageable memory footprint. Future work will address limitations through dynamic token prioritization, advanced quantization techniques, and instruction-tuned adaptations to enhance robustness and versatility.</p>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Corea STARSTROUPE Internal Documentation. (2023). Nexora Proto v0.1 Design Notes.</li>
+                <li>Corea STARSTROUPE</li>
+                <li>Sennrich, R., et al. (2016). Neural Machine Translation of Rare Words with Subword Units. <em>arXiv preprint arXiv:1508.07909</em>.</li>
+                <li>Kingma, D. P., & Ba, J. (2015). Adam: A Method for Stochastic Optimization. <em>arXiv preprint arXiv:1412.6980</em>.</li>
+                <li>Wu, Y., et al. (2016). Quantized Neural Networks: Training Neural Networks with Low Precision Weights and Activations. <em>arXiv preprint arXiv:1609.06161</em>.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256/sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <p><a href="#">Privacy Policy</a></p>
+                <p><a href="#">Terms of Service</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

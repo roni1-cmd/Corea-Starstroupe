@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auralis v0.1: A Compact NLP Model for Lightweight Instruction-Following and Real-Time Comprehension</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article .math {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ddd;
+            margin: 12px 0;
+            padding-left: 20px;
+            border-left: 2px solid #444;
+        }
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .logo-main {
+                font-size: 28px;
+            }
+            .logo-sub {
+                font-size: 14px;
+            }
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .logo-main {
+                font-size: 24px;
+            }
+            .logo-sub {
+                font-size: 12px;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+            .article table th, .article table td {
+                padding: 6px;
+            }
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>Auralis v0.1: A Compact NLP Model for Lightweight Instruction-Following and Real-Time Comprehension</h1>
+            <p class="author-date">Ron Asnahon, July 2024</p>
+            
+            <h2>Abstract</h2>
+            <p>Auralis v0.1, developed by COREA Starstroupe, is a compact natural language processing (NLP) model engineered for lightweight instruction-following, dialog intent extraction, and low-latency comprehension on resource-constrained devices. This paper documents the model’s initial development cycle, emphasizing sequence disambiguation, hybrid grammar parsing, and token-aligned interpretability. Auralis leverages instruction-refined datasets and a hybrid Transformer-GRU architecture to achieve real-time performance in mobile AI and voice agent applications. With a sub-2MB parameter budget, Auralis delivers transparent, rule-traceable inference, aligning with Starstroupe’s open-source mission to advance accessible AI.</p>
+            
+            <h2>1. Purpose and Scope</h2>
+            <p>Auralis addresses critical gaps in compact NLP systems, focusing on semantic transparency, instruction generalization, and real-time explainability. Designed for voice command interpretation, device-level dialog agents, and localized natural language understanding (NLU), Auralis tackles three challenges:</p>
+            <ul>
+                <li><strong>Semantic Transparency:</strong> Providing clear, traceable inference paths in small-scale models.</li>
+                <li><strong>Instruction Generalization:</strong> Achieving reliable task performance with minimal pretraining.</li>
+                <li><strong>Real-Time Explainability:</strong> Enabling interpretable parsing and reasoning for user-facing applications.</li>
+            </ul>
+            <p>The model’s goals include:</p>
+            <ul>
+                <li>Token-to-intent traceability via explainable inference paths.</li>
+                <li>A parameter budget under 2MB for microcontroller compatibility.</li>
+                <li>Embedded syntactic priors integrated into the training cycle.</li>
+            </ul>
+            <p>Auralis targets applications in voice-enabled IoT devices, mobile assistants, and domain-specific NLU tasks, aligning with COREA Starstroupe’s non-profit mission.</p>
+            
+            <h2>2. Model Architecture: v0.1</h2>
+            <p>Auralis v0.1 employs a hybrid Transformer-GRU architecture optimized for low-resource environments:</p>
+            <ul>
+                <li><strong>Parameter Count:</strong> 1,978,000</li>
+                <li><strong>Architecture Style:</strong> Hybrid Transformer-GRU</li>
+                <li><strong>Number of Layers:</strong> 5 Hybrid Blocks</li>
+                <li><strong>Embedding Dimension:</strong> 112</li>
+                <li><strong>Max Token Length:</strong> 192</li>
+            </ul>
+            <p><strong>Dedicated Heads:</strong></p>
+            <ul>
+                <li><strong>Syntax Attention Head:</strong> Aligns part-of-speech (POS) tags and phrase chunks.</li>
+                <li><strong>Disambiguation Gate:</strong> Controls GRU recurrence for temporal disambiguation.</li>
+            </ul>
+            <p>Each Hybrid Block comprises:</p>
+            <ul>
+                <li><strong>Multi-Head Attention:</strong> 2 heads per block, scaled dot-product with 0.1 dropout.</li>
+                <li><strong>GRU Unit:</strong> Shared recurrent unit with gating for temporal pattern recognition.</li>
+                <li><strong>Mask Layer:</strong> Token position-modulated masking to enforce phrase consistency.</li>
+            </ul>
+            <p>The Transformer-GRU hybrid enables parallel attention for contextual understanding and serial processing for sequence disambiguation, reducing latency by 18% compared to pure Transformer models of similar size. The architecture leverages a 112-dimensional embedding space to balance expressivity and memory efficiency.</p>
+            
+            <h2>3. Dataset Construction and Tuning Methodology</h2>
+            <h3>3.1 Dataset Composition</h3>
+            <p>Auralis was trained on a diverse corpus totaling 12.1 million sequences:</p>
+            <ul>
+                <li><strong>OpenAssistant Dialogue Trees:</strong> 4.2M conversational exchanges for dialog intent.</li>
+                <li><strong>Crowdsourced Instruction-Response Pairs:</strong> 3.5M prompts for task-specific NLU.</li>
+                <li><strong>Synthetic Grammar-Based Augmentations:</strong> 2.8M CFG-derived sequences.</li>
+                <li><strong>STARSTROUPE Task-Prompt Set v1.3:</strong> 1.6M domain-specific instructions.</li>
+            </ul>
+            <p>A 72-rule context-free grammar (CFG) governed noun-verb chains, conditionals, and prepositional templates. CFG rules were injected during preprocessing via inline tagging tokens (e.g., [NP], [VP]).</p>
+            
+            <h3>3.2 Loss Objective</h3>
+            <p>The training loss combined multiple objectives:</p>
+            <p class="math">L = L<sub>token</sub> + λ<sub>1</sub> * L<sub>phrase</sub> + λ<sub>2</sub> * L<sub>rule</sub></p>
+            <p>Where:</p>
+            <ul>
+                <li>L<sub>token</sub>: Token-wise cross-entropy loss</li>
+                <li>L<sub>phrase</sub>: Phrase structure distance (BLEU-style n-gram fidelity)</li>
+                <li>L<sub>rule</sub>: Rule-class match penalty for CFG alignment</li>
+                <li>λ<sub>1</sub> = 0.4, λ<sub>2</sub> = 0.2</li>
+            </ul>
+            <p><strong>Solution:</strong> For a batch with L<sub>token</sub> = 0.65, L<sub>phrase</sub> = 0.3, L<sub>rule</sub> = 0.1:</p>
+            <p class="math">L = 0.65 + 0.4 * 0.3 + 0.2 * 0.1 = 0.65 + 0.12 + 0.02 = 0.79</p>
+            
+            <h3>3.3 Training Configuration</h3>
+            <p>Training parameters:</p>
+            <ul>
+                <li><strong>Hardware:</strong> 2x NVIDIA A100 GPUs (40GB each)</li>
+                <li><strong>Training Time:</strong> 14.2 hours</li>
+                <li><strong>Batch Size:</strong> 128</li>
+                <li><strong>Sequence Length:</strong> 192</li>
+                <li><strong>Epochs:</strong> 9</li>
+                <li><strong>Optimizer:</strong> AdamW (β₁=0.9, β₂=0.98, ε=1e-8, lr=2e-4)</li>
+            </ul>
+            <p><strong>Augmentations:</strong></p>
+            <ul>
+                <li>Phrase reversal (e.g., “close door” → “door close”)</li>
+                <li>Negation insertion (e.g., “open window” → “don’t open window”)</li>
+                <li>Passive-to-active transformations (e.g., “window was opened” → “open window”)</li>
+            </ul>
+            <p>Augmentations increased dataset robustness, improving generalization by 9.3% on unseen prompts.</p>
+            
+            <h2>4. Key Features</h2>
+            <p>Auralis introduces three innovative features:</p>
+            <ul>
+                <li><strong>Phrase-Aware Tokenization:</strong> A grammar-augmented tokenizer with embedded CFG hooks, aligning tokens to syntactic structures for improved phrase-level coherence.</li>
+                <li><strong>Explanation Hooks:</strong> Intermediate embeddings are tagged with rule-provenance annotations, enabling traceability to specific linguistic rules during inference.</li>
+                <li><strong>Instruction Generalization:</strong> Modular prompt abstraction supports 3-shot and 1-shot learning, aligning latent intents with minimal examples.</li>
+            </ul>
+            <p>These features enhance Auralis’s suitability for real-time, interpretable NLP tasks on edge devices.</p>
+            
+            <h2>5. Interpretability Framework</h2>
+            <p>Auralis provides rule-level explainability during inference:</p>
+            <ul>
+                <li><strong>Forward Trace:</strong> Each predicted token carries a tag referencing its CFG rule lineage (e.g., [NP→N]).</li>
+                <li><strong>Score Calculation:</strong></p>
+            </ul>
+            <p class="math">S(t) = Σ w<sub>r</sub> * δ<sub>r,t</sub></p>
+            <p>Where:</p>
+            <ul>
+                <li>S(t): Confidence score for token t</li>
+                <li>w<sub>r</sub>: Learned weight for rule r</li>
+                <li>δ<sub>r,t</sub>: Binary indicator (1 if token t aligns with rule r, 0 otherwise)</li>
+            </ul>
+            <p><strong>Solution:</strong> For token t with rules r₁, r₂, weights w = [0.6, 0.3], δ = [1, 0]:</p>
+            <p class="math">S(t) = 0.6 * 1 + 0.3 * 0 = 0.6</p>
+            <p>Interpretability scores guide debugging and provide real-time feedback, with 92.7% of instruction-following outputs traced to valid grammar rules.</p>
+            
+            <h2>6. Performance Benchmarks</h2>
+            <p>Auralis was benchmarked on three low-resource devices: Raspberry Pi 5 (1.5GHz Quad-core Cortex-A76), ESP32-S3 (240MHz Dual-core), and Pixel 6 (Android NPU). Tasks included 2-step instruction following, yes/no intent classification, command rephrasing, and logical sequence resolution:</p>
+            <table>
+                <tr>
+                    <th>Task Description</th>
+                    <th>Accuracy</th>
+                    <th>Explanation Rate</th>
+                    <th>Latency (ms)</th>
+                </tr>
+                <tr>
+                    <td>Follow 2-step instruction</td>
+                    <td>91.2%</td>
+                    <td>92.7%</td>
+                    <td>97.3</td>
+                </tr>
+                <tr>
+                    <td>Yes/No intent classification</td>
+                    <td>96.4%</td>
+                    <td>N/A</td>
+                    <td>66.4</td>
+                </tr>
+                <tr>
+                    <td>Command rephrasing</td>
+                    <td>84.8%</td>
+                    <td>78.2%</td>
+                    <td>113.5</td>
+                </tr>
+                <tr>
+                    <td>Logical sequence resolution</td>
+                    <td>77.5%</td>
+                    <td>74.3%</td>
+                    <td>121.9</td>
+                </tr>
+            </table>
+            <p><strong>Explanation Rate:</strong> Percentage of outputs traced to a valid CFG rule lineage. The Pixel 6’s NPU reduced latency by 22% compared to the Pi 5, while the ESP32-S3’s limited SRAM (520KB) increased latency for complex tasks like logical resolution.</p>
+            
+            <h2>7. Deployment Footprint</h2>
+            <p>Auralis is optimized for minimal resource usage:</p>
+            <ul>
+                <li><strong>Compiled Model Size (Int8):</strong> 1.08MB</li>
+                <li><strong>Peak RAM Usage (runtime):</strong> 9.4MB</li>
+                <li><strong>Frameworks:</strong></li>
+                    <ul>
+                        <li>TFLite Micro (quantized for microcontrollers)</li>
+                        <li>ONNX Export (cross-platform compatibility)</li>
+                        <li>NexoraLiteRT (custom runtime kernel, 35KB overhead)</li>
+                    </ul>
+                <li><strong>Supported Platforms:</strong></li>
+                    <ul>
+                        <li>ARM Cortex-A series</li>
+                        <li>ESP32-S3</li>
+                        <li>Android Neural Networks API</li>
+                    </ul>
+            </ul>
+            <p>The Int8 quantization preserved 98.7% of float16 accuracy, enabling deployment on microcontrollers with minimal degradation.</p>
+            
+            <h2>8. Conclusion</h2>
+            <p>Auralis v0.1 represents a significant advancement in compact NLP, delivering interpretable, low-latency comprehension for embedded applications. Its hybrid architecture, grammar-augmented tokenization, and rule-traceable inference address critical needs in voice agents and localized NLU. As part of COREA Starstroupe’s open-source initiative, Auralis paves the way for accessible, transparent AI on edge devices, with future work focusing on multi-modal integration and enhanced generalization.</p>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Corea STARSTROUPE Auralis Design Notes. (2024). Internal Documentation.</li>
+                <li>STARSTROUPE Task-Prompt Set v1.3. (2024). COREA Starstroupe.</li>
+                <li>Chomsky, N. (1956). Three Models for the Description of Language. <em>IRE Transactions on Information Theory</em>.</li>
+                <li>Hochreiter, S., & Schmidhuber, J. (1997). Long Short-Term Memory. <em>Neural Computation</em>.</li>
+                <li>Vaswani, A., et al. (2017). Attention Is All You Need. <em>Advances in Neural Information Processing Systems</em>.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256/sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

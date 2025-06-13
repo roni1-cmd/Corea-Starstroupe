@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auralis: A Next-Generation Small Language Model for Nuanced NLP in Resource-Constrained Environments</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article .math {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ddd;
+            margin: 12px 0;
+            padding-left: 20px;
+            border-left: 2px solid #444;
+        }
+
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+
+            .article table th, .article table td {
+                padding: 6px;
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>Auralis: A Next-Generation Small Language Model for Nuanced NLP in Resource-Constrained Environments</h1>
+            <p class="author-date">Ron Asnahon, January 2025</p>
+            
+            <h2>Abstract</h2>
+            <p>This paper presents Auralis, Corea STARSTROUPE’s next-generation small language model (SLM), designed for nuanced natural language processing in resource-constrained environments. Building upon NeuroLite, Auralis introduces hierarchical token routing, dynamic context embedding, and neurosymbolic fusion. At 8.7 million parameters, it nearly doubles the cognitive capacity of Nexora’s NeuroLite-4M while preserving energy efficiency. We outline its architecture, multistage training process, intent decoding framework, and quantitative benchmarks demonstrating domain transfer capabilities across finance, education, and conversational AI.</p>
+            
+            <h2>1. Introduction</h2>
+            <p>Small language models (SLMs) are increasingly vital for scalable, sustainable NLP in edge devices and low-bandwidth platforms. Auralis, developed by COREA Starstroupe, builds on Nexora’s NeuroLite-4M to deliver nuanced understanding of temporality, subjectivity, and context with minimal computational overhead. This paper details Auralis’s architecture, training pipeline, and benchmarks, advancing COREA Starstroupe’s open-source mission to enhance human-machine interaction.</p>
+            
+            <h2>2. System Architecture</h2>
+            <h3>2.1 Summary</h3>
+            <p>Auralis is defined by:</p>
+            <ul>
+                <li><strong>Parameters:</strong> 8.7M</li>
+                <li><strong>Layers:</strong> 10 Transformer-lite blocks</li>
+                <li><strong>Embedding Dimension:</strong> 192</li>
+                <li><strong>Sequence Limit:</strong> 384 tokens</li>
+                <li><strong>Custom Vocabulary:</strong> 24,000 tokens (domain-adaptive)</li>
+            </ul>
+            
+            <h3>2.2 Key Innovations</h3>
+            <p>Auralis introduces:</p>
+            <ul>
+                <li><strong>Context Drift Correction Module (CDCM):</strong> Realigns embeddings during long utterances using temporal attention weights.</li>
+                <li><strong>Hierarchical Routing Transformer:</strong> Dynamically assigns attention depth based on token relevance, reducing computational load.</li>
+                <li><strong>Symbolic-Augmented Decoder (SAD):</strong> Integrates basic logic rules to enhance low-context inference accuracy.</li>
+            </ul>
+            
+            <h3>2.3 Architecture Schematic (Abbreviated)</h3>
+            <p>Token Embed → Positional Encode → CDCM → 10x {LayerNorm → MH Attention → Residual → FFN → Routing Dropout} → SAD → Output Layer</p>
+            
+            <h2>3. Training Pipeline</h2>
+            <h3>3.1 Corpus</h3>
+            <p>The training corpus includes:</p>
+            <ul>
+                <li>6.2M tokenized conversational snippets</li>
+                <li>Sources: educational Q&A, medical dialogues, productivity commands</li>
+                <li>Preprocessing: noise reduction, coreference resolution, punctuation normalization</li>
+            </ul>
+            
+            <h3>3.2 Objectives</h3>
+            <p>Combined objectives:</p>
+            <ul>
+                <li>Masked Language Modeling (MLM) with 18% dynamic token masking</li>
+                <li>Sentence Order Prediction</li>
+                <li>Intent Discrimination</li>
+            </ul>
+            
+            <h3>3.3 Optimization Parameters</h3>
+            <p>Training setup:</p>
+            <ul>
+                <li><strong>Optimizer:</strong> LAMB</li>
+                <li><strong>Initial LR:</strong> 2.5e-4, cosine warmup over 20k steps</li>
+                <li><strong>Epochs:</strong> 12 full passes</li>
+                <li><strong>Hardware:</strong> 2× A100 GPUs (32GB)</li>
+            </ul>
+            
+            <h3>3.4 Convergence Graph</h3>
+            <p>Total training loss over time t is defined as:</p>
+            <p class="math">L(t) = L<sub>MLM</sub>(t) + L<sub>SOP</sub>(t) + L<sub>ID</sub>(t)</p>
+            <p><strong>Solution:</strong> Assuming L<sub>MLM</sub> is cross-entropy loss, L<sub>SOP</sub> is binary cross-entropy, and L<sub>ID</sub> is softmax cross-entropy, for a batch at step t:</p>
+            <p class="math">L<sub>MLM</sub>(t) = -Σ [y<sub>i</sub> log(p<sub>i</sub>)]</p>
+            <p class="math">L<sub>SOP</sub>(t) = -Σ [y<sub>j</sub> log(q<sub>j</sub>) + (1-y<sub>j</sub>) log(1-q<sub>j</sub>)]</p>
+            <p class="math">L<sub>ID</sub>(t) = -Σ [y<sub>k</sub> log(r<sub>k</sub>)]</p>
+            <p>With empirical convergence at t = 120k steps, L(t) ≈ 0.85 (sum of weighted losses, normalized by batch size).</p>
+            
+            <h2>4. Intent Embedding and Query Decoding</h2>
+            <p>Pooled embedding h<sub>pool</sub> is computed from the last token layer:</p>
+            <p class="math">h<sub>pool</sub> = (1/n) Σ h<sub>L,i</sub></p>
+            <p>Feed into a 4-head intent decoder:</p>
+            <ul>
+                <li>Dense(192→96) → ReLU</li>
+                <li>Dense(96→32) → ReLU</li>
+                <li>Dense(32→8) → Softmax (intent logits)</li>
+            </ul>
+            <p>Real-world benchmarks:</p>
+            <table>
+                <tr>
+                    <th>Domain</th>
+                    <th>Accuracy</th>
+                    <th>Latency (ms)</th>
+                    <th>Energy (Wh/100 inf)</th>
+                </tr>
+                <tr>
+                    <td>Productivity</td>
+                    <td>93.4%</td>
+                    <td>15.2</td>
+                    <td>0.13</td>
+                </tr>
+                <tr>
+                    <td>Conversational</td>
+                    <td>89.1%</td>
+                    <td>14.7</td>
+                    <td>0.12</td>
+                </tr>
+                <tr>
+                    <td>Medical</td>
+                    <td>87.3%</td>
+                    <td>18.5</td>
+                    <td>0.15</td>
+                </tr>
+            </table>
+            
+            <h2>5. Computational Efficiency</h2>
+            <h3>5.1 FLOPs Estimate</h3>
+            <p>For layers L=10, heads H=4, embedding dim d=192:</p>
+            <p class="math">FLOPs ≈ 2 * L * (4 * d * d * n + H * n * d)</p>
+            <p><strong>Solution:</strong> For sequence length n=384:</p>
+            <p class="math">FLOPs ≈ 2 * 10 * (4 * 192 * 192 * 384 + 4 * 384 * 192)</p>
+            <p class="math">= 20 * (4 * 147,456 * 384 + 1,536 * 192)</p>
+            <p class="math">= 20 * (226,492,416 + 294,912)</p>
+            <p class="math">= 20 * 226,787,328 ≈ 4.536 × 10⁹ FLOPs per forward pass</p>
+            
+            <h3>5.2 Model Size (Quantized)</h3>
+            <p>Model sizes:</p>
+            <ul>
+                <li><strong>Full precision:</strong> 34.2MB</li>
+                <li><strong>8-bit quantized:</strong> 9.6MB</li>
+                <li><strong>Speed boost:</strong> +63% on Raspberry Pi 5 (vs NeuroLite)</li>
+            </ul>
+            
+            <h2>6. Ablation Analysis</h2>
+            <p>Ablation results for productivity domain:</p>
+            <table>
+                <tr>
+                    <th>Configuration</th>
+                    <th>Intent Accuracy</th>
+                </tr>
+                <tr>
+                    <td>Base (no CDCM)</td>
+                    <td>83.5%</td>
+                </tr>
+                <tr>
+                    <td>w/ CDCM</td>
+                    <td>87.4%</td>
+                </tr>
+                <tr>
+                    <td>+ SAD module</td>
+                    <td>90.2%</td>
+                </tr>
+                <tr>
+                    <td>+ Routing Transformer</td>
+                    <td>93.4%</td>
+                </tr>
+            </table>
+            <p>CDCM and Routing Transformers significantly improved resilience to ambiguous phrasing.</p>
+            
+            <h2>7. Conclusion</h2>
+            <p>Auralis, developed by COREA Starstroupe, advances small language models with modular, neurosymbolic, and efficient NLP capabilities. Its performance across domains and suitability for edge devices position it as a benchmark for mobile cognition and on-device assistants, aligning with COREA Starstroupe’s non-profit mission. Future extensions include multilingual fine-tuning, incremental context memory, and deployment on wearables.</p>
+            
+            <h2>Appendix A: Layer Norm Distribution (Avg across Epoch 10)</h2>
+            <table>
+                <tr>
+                    <th>Layer</th>
+                    <th>Mean Gamma</th>
+                    <th>Mean Beta</th>
+                </tr>
+                <tr>
+                    <td>L3</td>
+                    <td>0.97</td>
+                    <td>-0.12</td>
+                </tr>
+                <tr>
+                    <td>L7</td>
+                    <td>1.04</td>
+                    <td>0.08</td>
+                </tr>
+                <tr>
+                    <td>L10</td>
+                    <td>0.99</td>
+                    <td>-0.03</td>
+                </tr>
+            </table>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Chowdhery, A., et al. (2022). PaLM: Scaling Language Models with Pathways. <em>arXiv preprint arXiv:2204.02311</em>.</li>
+                <li>Corea STARSTROUPE Auralis Blueprint Series. (2024). Internal Documentation.</li>
+                <li>Devlin, J., et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers. <em>arXiv preprint arXiv:1810.04805</em>.</li>
+                <li>Wang, S., et al. (2020). Linformer: Reducing Transformer Memory Footprint. <em>arXiv preprint arXiv:2006.04768</em>.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

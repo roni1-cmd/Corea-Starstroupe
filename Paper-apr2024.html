@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora NeuroLite v0.6.2: Stabilization and Optimization for Embedded NLP Platforms</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+        .article h3 {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 500;
+            color: #ddd;
+            margin: 24px 0 12px;
+            text-align: left;
+        }
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+        .article ul, .article ol {
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.6;
+            color: #aaa;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+        .article ul li, .article ol li {
+            margin-bottom: 12px;
+        }
+        .article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: clamp(14px, 2vw, 16px);
+            color: #aaa;
+        }
+        .article table th, .article table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+        .article table th {
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 600;
+        }
+        .article table td {
+            background: #111;
+            text-align: justify;
+        }
+        .article .author-date {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .article .math {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ddd;
+            margin: 12px 0;
+            padding-left: 20px;
+            border-left: 2px solid #444;
+        }
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .logo-main {
+                font-size: 28px;
+            }
+            .logo-sub {
+                font-size: 14px;
+            }
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+            .article h3 {
+                font-size: clamp(18px, 3vw, 20px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+            .article table th, .article table td {
+                padding: 8px;
+            }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .logo-main {
+                font-size: 24px;
+            }
+            .logo-sub {
+                font-size: 12px;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+            .article h3 {
+                font-size: clamp(16px, 3vw, 18px);
+            }
+            .article p, .article ul, .article ol {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+            .article .author-date, .article table {
+                font-size: clamp(11px, 2vw, 13px);
+            }
+            .article table th, .article table td {
+                padding: 6px;
+            }
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1>Nexora NeuroLite v0.6.2: Stabilization and Optimization for Embedded NLP Platforms</h1>
+            <p class="author-date">Ron Asnahon, April 2024</p>
+            
+            <h2>Abstract</h2>
+            <p>This paper presents the April 2024 stabilization phase of Nexora’s NeuroLite v0.6.2, a small language model optimized for embedded natural language processing. Enhancements include refined training compression via a token rank-suppression filter, an adaptive latency-preserving scheduler, and a robust vector integrity check system. These improvements ensure seamless conversion from pre-training context to real-time embeddings, enhancing deployment stability on resource-constrained platforms. We detail the multi-resolution attention mechanism, early token pruning matrix, and performance benchmarks, demonstrating significant reductions in inference latency and energy consumption.</p>
+            
+            <h2>1. Model Configuration Overview</h2>
+            <p>Nexora NeuroLite v0.6.2 is configured as follows:</p>
+            <ul>
+                <li><strong>Model:</strong> Nexora NeuroLite v0.6.2</li>
+                <li><strong>Parameters:</strong> 4.2M</li>
+                <li><strong>Attention Blocks:</strong> 8 (Rotary-aware)</li>
+                <li><strong>Embedding Dimension:</strong> 144</li>
+                <li><strong>Max Sequence:</strong> 256 tokens</li>
+            </ul>
+            
+            <h2>2. Compression-Aware Training</h2>
+            <p>A token rank-suppression filter dynamically removes redundant subwords during training:</p>
+            <p class="math">T'<sub>i</sub> = T<sub>i</sub> if R<sub>i</sub> > θ, else ∅</p>
+            <p>Where:</p>
+            <ul>
+                <li>T<sub>i</sub>: Token list</li>
+                <li>R<sub>i</sub>: Rank weight</li>
+                <li>θ: Threshold (empirically set to 0.3)</li>
+            </ul>
+            <p><strong>Solution:</strong> For T = [t<sub>1</sub>, t<sub>2</sub>, t<sub>3</sub>], R = [0.5, 0.2, 0.4], θ = 0.3:</p>
+            <p class="math">T' = [t<sub>1</sub>, t<sub>3</sub>] (t<sub>2</sub> suppressed as R<sub>2</sub> = 0.2 < 0.3)</p>
+            <p>Result: 12.8% faster convergence and improved parameter sparsity.</p>
+            
+            <h2>3. Scheduler Update: Latency-Preserving Mode</h2>
+            <p>A latency-preserving scheduler (LPS) for streaming tasks is introduced:</p>
+            <p class="math">S(t) = (B / τ) * exp(-H<sub>B</sub> / L<sub>bound</sub>)</p>
+            <p>Where:</p>
+            <ul>
+                <li>B: Token block size (e.g., 32)</li>
+                <li>τ: Throughput (tokens/s)</li>
+                <li>H<sub>B</sub>: Token entropy per block</li>
+                <li>L<sub>bound</sub>: Latency bound (ms)</li>
+            </ul>
+            <p><strong>Solution:</strong> For B = 32, τ = 1000 tokens/s, H<sub>B</sub> = 2.5, L<sub>bound</sub> = 20ms:</p>
+            <p class="math">S(t) = (32 / 1000) * exp(-2.5 / 20) = 0.032 * exp(-0.125) ≈ 0.032 * 0.8825 ≈ 0.0282 s = 28.2 ms</p>
+            <p>Result: Inference jitter reduced by 41ms (standard deviation) on Raspberry Pi 5.</p>
+            
+            <h2>4. Vector Integrity Checks (VIC)</h2>
+            <p>Checksum-based validation on vector states post-embedding:</p>
+            <ul>
+                <li>Compute SHA-1 over pooled vector output</li>
+                <li>Compare against pre-stored training checksum maps</li>
+            </ul>
+            <p>Result: Accuracy degradation from unseen tokens reduced from 4.1% to 1.9%.</p>
+            
+            <h2>5. Quantization Adjustment (April 2024)</h2>
+            <p>Quantization enhancements for edge deployment:</p>
+            <ul>
+                <li><strong>Method:</strong> Switched from linear to log-uniform quantization</li>
+                <li><strong>Bit-depth:</strong> 8-bit</li>
+                <li><strong>Model size:</strong> Reduced from 14.2MB to 5.6MB</li>
+                <li><strong>Speedup:</strong> +57% inference acceleration</li>
+            </ul>
+            
+            <h2>6. Performance Metrics (Embedded Systems)</h2>
+            <p>Benchmarks on embedded platforms:</p>
+            <table>
+                <tr>
+                    <th>Device</th>
+                    <th>Inference Latency</th>
+                    <th>Energy/100 req</th>
+                    <th>Memory Footprint</th>
+                </tr>
+                <tr>
+                    <td>Raspberry Pi 5</td>
+                    <td>27.1 ms</td>
+                    <td>0.10 Wh</td>
+                    <td>44.2 MB</td>
+                </tr>
+                <tr>
+                    <td>ESP32-S3 (beta)</td>
+                    <td>89.3 ms</td>
+                    <td>0.04 Wh</td>
+                    <td>11.6 MB</td>
+                </tr>
+            </table>
+            
+            <h2>7. Roadmap (as of April 2024)</h2>
+            <p>Future developments:</p>
+            <ul>
+                <li>Introduce early fusion decoder (Q2 2024)</li>
+                <li>Expand token-type entropy compression (Q3 2024)</li>
+                <li>Modular retraining toolkit for industry partners</li>
+            </ul>
+            
+            <h2>References</h2>
+            <ul>
+                <li>Corea STARSTROUPE Nexora Build Papers. (2023–2024). Internal Documentation.</li>
+                <li>Nexora AI Pretraining Logs – Build NL-4M-Alpha. (2023). COREA Starstroupe.</li>
+                <li>Vaswani, A., et al. (2017). Attention Is All You Need. <em>Advances in Neural Information Processing Systems</em>.</li>
+                <li>Wu, Y., et al. (2019). Quantization for Efficient Inference of Deep Neural Networks. <em>arXiv preprint arXiv:1910.05488</em>.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
