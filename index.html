@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COREA Starstroupe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: #fff;
+        }
+
+        .nav .login {
+            color: #fff;
+            background: #3F9FFF;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .nav .login:hover {
+            background: #2a8cff;
+        }
+
+        /* Main Content */
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 0 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 8px; /* Further reduced gap for closer alignment on desktop */
+        }
+
+        .content {
+            flex: 1;
+            max-width: 600px;
+            z-index: 10;
+            text-align: left;
+        }
+
+        .hero-text {
+            font-size: clamp(32px, 6vw, 64px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 12px; /* Further reduced margin for tighter layout */
+        }
+
+        .hero-description {
+            font-size: clamp(14px, 2vw, 16px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .hero-image {
+            max-width: 600px; /* Increased max-width for larger image on desktop */
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-left: 8px; /* Reduced margin for closer alignment */
+        }
+
+        /* Products section */
+        .products-section {
+            min-height: 300vh;
+            position: relative;
+            background: #111;
+            color: #fff;
+        }
+
+        .products-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 60px;
+        }
+
+        .products-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .products-title {
+            flex-shrink: 0;
+            width: 350px;
+            font-size: clamp(40px, 5vw, 72px);
+            font-weight: 700;
+            line-height: 0.9;
+            margin-right: 80px;
+        }
+
+        .cards-wrapper {
+            flex: 1;
+            overflow: hidden;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .cards-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            will-change: transform;
+            transition: none;
+            height: 100%;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .card {
+            min-width: 380px;
+            width: 380px;
+            height: 520px;
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: scale(1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+            transition: background 0.4s ease;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+
+        .card.nexora {
+            background-image: url('https://via.placeholder.com/380x520/1a1a1a/3F9FFF?text=NEXORA');
+        }
+
+        .card.nexora:hover {
+            background-image: url('Nexora.png');
+        }
+
+        .card.nexora::after {
+            background: linear-gradient(90deg, #3F9FFF, #9C4DFF);
+        }
+
+        .card.auralis {
+            background-image: url('https://via.placeholder.com/380x520/1a1a1a/FF4D9C?text=AURALIS');
+        }
+
+        .card.auralis:hover {
+            background-image: url('Auralis.png');
+        }
+
+        .card.auralis::after {
+            background: linear-gradient(90deg, #FF4D9C, #FF2EB2);
+        }
+
+        .card.peachi {
+            background-image: url('https://via.placeholder.com/380x520/1a1a1a/FF76B2?text=PEACHI');
+        }
+
+        .card.peachi:hover {
+            background-image: url('Corea OS.png');
+        }
+
+        .card.peachi::after {
+            background: linear-gradient(90deg, #FF76B2, #6A00FF);
+        }
+
+        .card.coming-soon {
+            background-image: url('https://via.placeholder.com/380x520/1a1a1a/9C4DFF?text=COMING+SOON');
+        }
+
+        .card.coming-soon:hover {
+            background-image: url('https://via.placeholder.com/380x520/1a1a1a/9C4DFF?text=COMING+SOON+HOVER');
+        }
+
+        .card.coming-soon::after {
+            background: linear-gradient(90deg, #9C4DFF, #3F9FFF);
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #555;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .card {
+            background-position: center;
+            background-size: cover;
+            transition: transform 0.3s ease, background-image 0.4s ease;
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-logo {
+            width: 60px;
+            height: 60px;
+            background: #333;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .card.nexora .card-logo {
+            background: linear-gradient(135deg, #3F9FFF, #9C4DFF);
+        }
+
+        .card.auralis .card-logo {
+            background: linear-gradient(135deg, #FF4D9C, #FF2EB2);
+        }
+
+        .card.peachi .card-logo {
+            background: linear-gradient(135deg, #FF76B2, #6A00FF);
+        }
+
+        .card.coming-soon .card-logo {
+            background: linear-gradient(135deg, #9C4DFF, #3F9FFF);
+        }
+
+        .card-initial-content {
+            transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease;
+            opacity: 1;
+            visibility: visible;
+            height: auto;
+        }
+
+        .card:hover .card-initial-content {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+        }
+
+        .card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .card .subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card .brief {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #aaa;
+        }
+
+        .card .description {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #aaa;
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .card:hover .description {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .card-status {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 6px 12px;
+            background: #333;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .card.coming-soon .card-status {
+            background: rgba(156, 77, 255, 0.2);
+            color: #9C4DFF;
+        }
+
+        .card:not(.coming-soon) .card-status {
+            background: rgba(63, 159, 255, 0.2);
+            color: #3F9FFF;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* Background grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 120px 32px;
+                gap: 24px;
+            }
+
+            .hero-text {
+                font-size: clamp(28px, 5vw, 48px);
+            }
+
+            .hero-description {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+
+            .hero-image {
+                max-width: 80%;
+                margin-left: 0;
+                margin-top: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 20px;
+            }
+
+            .nav {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav a {
+                font-size: 12px;
+            }
+
+            .main {
+                padding: 100px 20px 40px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .hero-image {
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .products-section {
+                min-height: auto;
+                padding-bottom: 40px;
+            }
+
+            .products-container {
+                position: relative;
+                height: auto;
+                padding: 30px 20px;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+
+            .products-content {
+                flex-direction: column;
+                height: auto;
+                gap: 32px;
+                max-width: 100%;
+            }
+
+            .products-title {
+                width: 100%;
+                font-size: clamp(28px, 6vw, 40px);
+                margin-right: 0;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .cards-wrapper {
+                width: 100%;
+                height: auto;
+                overflow: visible;
+            }
+
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+                transform: none !important;
+                gap: 24px;
+            }
+
+            .card {
+                min-width: 90%;
+                width: 90%;
+                max-width: 400px;
+                height: auto;
+                min-height: 400px;
+                padding: 24px;
+            }
+
+            .card h3 {
+                font-size: 24px;
+            }
+
+            .card .description {
+                top: 24px;
+                left: 24px;
+                right: 24px;
+                font-size: 14px;
+            }
+
+            .card-logo {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .products-container {
+                padding: 20px 16px;
+            }
+
+            .card {
+                min-width: 100%;
+                width: 100%;
+                min-height: 360px;
+                padding: 20px;
+            }
+
+            .card h3 {
+                font-size: 20px;
+            }
+
+            .card .subtitle {
+                font-size: 12px;
+            }
+
+            .card .brief, .card .description {
+                font-size: 13px;
+            }
+
+            .card .description {
+                top: 20px;
+                left: 20px;
+                right: 20px;
+            }
+
+            .card-logo {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .card-status {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .hero-image {
+                max-width: 100%;
+            }
+
+            .hero-text {
+                font-size: clamp(24px, 5vw, 36px);
+            }
+
+            .hero-description {
+                font-size: clamp(12px, 2vw, 13px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+            <nav class="nav">
+                <a href="papers">PAPER ARCHIVE</a>
+                <a href="build">BUILDING</a>
+                <a href="careers">CAREERS</a>
+                <a href="about">ABOUT</a>
+                <a href="#">CONTACT</a>
+            </nav>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <div class="hero-text">Project Mindmesh: Lumen Layer</div>
+                <p class="hero-description">An advanced perceptual interface that bridges human intent and system intelligence.</p>
+            </div>
+            <img src="Main.png" alt="Hero Image" class="hero-image">
+        </main>
+    </div>
+
+    <section class="products-section">
+        <div class="products-container">
+            <div class="products-content">
+                <h2 class="products-title">Our Products</h2>
+                <div class="cards-wrapper">
+                    <div class="cards-container" id="cardsContainer">
+                        <div class="card nexora">
+                            <div class="card-initial-content">
+                                <h3>nexora</h3>
+                                <div class="subtitle">AI ASSISTANT PLATFORM</div>
+                                <p class="brief">Nexora is an advanced AI assistant designed to revolutionize human-machine interaction. Powered by cutting-edge machine learning algorithms, it offers seamless integration across devices, providing personalized, context-aware responses. Ideal for professionals and businesses, Nexora streamlines workflows with real-time data processing and adaptive learning capabilities.</p>
+                            </div>
+                            <div class="description">
+                                <p><strong>Comprehensive Features:</strong></p>
+                                <ul style="margin: 12px 0; padding-left: 20px; color: #aaa;">
+                                    <li>Advanced natural language processing for human-like conversations</li>
+                                    <li>Multi-modal input support (text, voice, images)</li>
+                                    <li>Contextual memory for continuous dialogue</li>
+                                    <li>Real-time learning to adapt to user preferences</li>
+                                    <li>Enterprise-grade security and data privacy</li>
+                                </ul>
+                                <p>Nexora transforms workflows by automating repetitive tasks, providing actionable insights, and enabling seamless collaboration across platforms. Whether you're managing a team or streamlining personal tasks.</p>
+                            </div>
+                            <div class="card-status">Coming Soon</div>
+                        </div>
+                        
+                        <div class="card auralis">
+                            <div class="card-initial-content">
+                                <h3>Auralis</h3>
+                                <div class="subtitle">NATURAL LANGUAGE PROCESSING ENGINE</div>
+                                <p class="brief">Auralis is a state-of-the-art NLP engine that redefines communication technology. Built for global scalability, it supports real-time translation, sentiment analysis, and voice recognition across multiple languages. Auralis empowers businesses to understand customer needs, automate support, and enhance user experiences with unparalleled accuracy.</p>
+                            </div>
+                            <div class="description">
+                                <p><strong>Advanced Capabilities:</strong></p>
+                                <ul style="margin: 12px 0; padding-left: 20px; color: #aaa;">
+                                    <li>Deep sentiment analysis for customer feedback</li>
+                                    <li>High-fidelity voice recognition for hands-free operation</li>
+                                    <li>Automated text summarization for quick insights</li>
+                                    <li>Dynamic language generation for personalized content</li>
+                                    <li>Low-latency processing for real-time applications</li>
+                                </ul>
+                                <p>Auralis is the backbone of next-generation communication tools, enabling seamless interactions in customer service, education, and content creation. Its robust architecture supports high-volume data processing.</p>
+                            </div>
+                            <div class="card-status">Coming Soon</div>
+                        </div>
+                        
+                        <div class="card peachi">
+                            <div class="card-initial-content">
+                                <h3>Peachi</h3>
+                                <div class="subtitle">AI-POWERED OPERATING SYSTEM</div>
+                                <p class="brief">Peachi is a groundbreaking operating system optimized for the AI era. Featuring an AI-driven kernel and adaptive user interface, it delivers unparalleled performance and security. Peachi seamlessly integrates with cloud services and supports cross-platform applications, making it the ultimate OS for modern computing needs.</p>
+                            </div>
+                            <div class="description">
+                                <p><strong>Key Features:</strong></p>
+                                <ul style="margin: 12px 0; padding-left: 20px; color: #aaa;">
+                                    <li>AI-optimized kernel for lightning-fast processing</li>
+                                    <li>Dynamic UI that adapts to user behavior</li>
+                                    <li>Advanced encryption and security protocols</li>
+                                    <li>Seamless integration with cloud and IoT devices</li>
+                                    <li>Energy-efficient design for sustainable computing</li>
+                                </ul>
+                                <p>Peachi redefines computing by learning user workflows and optimizing resources in real time. From creative professionals to tech enterprises, Peachi provides a secure, intuitive, and high-performance environment for all your digital needs.</p>
+                            </div>
+                            <div class="card-status">Coming Soon</div>
+                        </div>
+                        
+                        <div class="card coming-soon">
+                            <div class="card-initial-content">
+                                <h3>Coming Soon</h3>
+                                <div class="subtitle">NEXT-GENERATION INNOVATION</div>
+                                <p class="brief">Our upcoming product is set to redefine the boundaries of AI technology. Currently in development, this ambitious project promises breakthrough advancements in user interaction, scalability, and performance. Designed for global accessibility, it will integrate seamlessly with our existing ecosystem.</p>
+                            </div>
+                            <div class="description">
+                                <p><strong>What to Expect:</strong></p>
+                                <ul style="margin: 12px 0; padding-left: 20px; color: #aaa;">
+                                    <li>Revolutionary technology with unmatched performance</li>
+                                    <li>Deep integration with Nexora, Auralis, and Peachi</li>
+                                    <li>Enhanced AI-driven user experiences</li>
+                                    <li>Global accessibility with multi-language support</li>
+                                    <li>Premium features for enterprise and individual users</li>
+                                </ul>
+                                <p>This project represents COREA's most ambitious endeavor yet. Stay tuned for updates and sign up for exclusive early access notifications to be among the first to experience this game-changing innovation.</p>
+                            </div>
+                            <div class="card-status">Coming Soon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="https://player.vimeo.com/external/451468256.sd.mp4?s=5b3e6a6e0b9b6b6e6b7f0b6e6b7f0b6e6b7f0b6e&profile_id=165" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="privacy-policy">Privacy Policy</a>
+                <a href="terms-of-service">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Optimized horizontal scroll on vertical scroll for desktop only
+        let ticking = false;
+        
+        function updateCardsPosition() {
+            if (window.innerWidth <= 900) return; // Disable horizontal scroll on mobile
+            
+            const productsSection = document.querySelector('.products-section');
+            const cardsContainer = document.getElementById('cardsContainer');
+            
+            if (!productsSection || !cardsContainer) return;
+            
+            const rect = productsSection.getBoundingClientRect();
+            const sectionHeight = productsSection.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            
+            if (rect.top <= 0 && rect.bottom >= viewportHeight) {
+                const scrollProgress = Math.min(Math.max(Math.abs(rect.top) / (sectionHeight - viewportHeight), 0), 1);
+                
+                const cardsWidth = cardsContainer.scrollWidth;
+                const containerWidth = cardsContainer.parentElement.offsetWidth;
+                const maxScroll = Math.max(0, cardsWidth - containerWidth);
+                
+                const translateX = scrollProgress * maxScroll;
+                cardsContainer.style.transform = `translate3d(-${translateX}px, 0, 0)`;
+            }
+            
+            ticking = false;
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateCardsPosition);
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('resize', requestTick, { passive: true });
+        window.addEventListener('load', updateCardsPosition);
+    </script>
+</body>
+</html>
