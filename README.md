@@ -87,5 +87,5 @@ All research, code, and tools are released under the **MIT License** unless othe
 ---
 
 > _"The future is not synthetic—it is structured."_  
-> — Corea STARSTROUPE, 2025
+> — Ron Asnahon, 2025
 
