@@ -1,6 +1,6 @@
 <h1 align="center">
   <img src="https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/rocket_launch/default/24px.svg" width="28" valign="middle" />  
-  Corea STARSTROUPE
+  Corea Starstroupe
 </h1>
 
 <p align="center">
