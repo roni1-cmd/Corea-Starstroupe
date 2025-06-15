@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corea Starstroupe - Library</title>
+    <link rel="icon" href="Credits.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --electric-blue: rgb(63, 159, 255);
+            --vivid-purple: rgb(156, 77, 255);
+            --hot-pink: rgb(255, 77, 156);
+            --magenta: rgb(255, 46, 178);
+            --rose-pink: rgb(255, 118, 178);
+            --deep-violet: rgb(106, 0, 255);
+            
+            /* Light mode */
+            --bg-primary: #000000;
+            --bg-secondary: #000000;
+            --bg-hero: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #666666;
+            --text-on-bg: #ffffff;
+            --border-color: #333333;
+            --card-bg: #000000;
+            --hover-bg: #111111;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #000000;
+                --bg-hero: #000000;
+                --text-primary: #ffffff;
+                --text-secondary: #b3b3b3;
+                --text-on-bg: #ffffff;
+                --border-color: #333333;
+                --card-bg: #000000;
+                --hover-bg: #111111;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-on-bg);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .hero-section {
+            background: var(--bg-hero);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(63, 159, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(156, 77, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 77, 156, 0.1) 0%, transparent 50%),
+                url('Credits.png');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 25px 20px 60px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--text-on-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            outline: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            border-color: var(--electric-blue);
+            box-shadow: 0 4px 20px rgba(63, 159, 255, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-tab {
+            padding: 12px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            background: var(--card-bg);
+            color: var(--text-on-bg);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-tab:hover {
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .filter-tab.active {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .filter-tab.featured { border-color: var(--hot-pink); }
+        .filter-tab.featured.active { background: var(--hot-pink); border-color: var(--hot-pink); }
+        
+        .filter-tab.llm { border-color: var(--electric-blue); }
+        .filter-tab.llm.active { background: var(--electric-blue); border-color: var(--electric-blue); }
+        
+        .filter-tab.image { border-color: var(--vivid-purple); }
+        .filter-tab.image.active { background: var(--vivid-purple); border-color: var(--vivid-purple); }
+        
+        .filter-tab.vision { border-color: var(--rose-pink); }
+        .filter-tab.vision.active { background: var(--rose-pink); border-color: var(--rose-pink); }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-on-bg);
+        }
+
+        .model-count {
+            color: var(--electric-blue);
+            font-size: 18px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sort-dropdown {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--card-bg);
+            color: var(--text-on-bg);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .model-list {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .model-item {
+            display: flex;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .model-item:hover {
+            background: var(--hover-bg);
+            transform: translateX(6px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .model-item:last-child {
+            border-bottom: none;
+        }
+
+        .model-item.hidden {
+            display: none;
+        }
+
+        .model-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-right: 20px;
+            background-image: url('Nexora.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .model-info {
+            flex: 1;
+        }
+
+        .model-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-on-bg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .redirect-arrow {
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .model-item:hover .redirect-arrow {
+            color: var(--electric-blue);
+            transform: translateX(4px);
+        }
+
+        .model-specs {
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 20px;
+            font-weight: 500;
+        }
+
+        .model-tags {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.llm {
+            background: rgba(63, 159, 255, 0.15);
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+        }
+
+        .tag.vision {
+            background: rgba(255, 118, 178, 0.15);
+            border-color: var(--rose-pink);
+            color: var(--rose-pink);
+        }
+
+        .tag.image {
+            background: rgba(156, 77, 255, 0.15);
+            border-color: var(--vivid-purple);
+            color: var(--vivid-purple);
+        }
+
+        .tag.serverless {
+            background: rgba(255, 77, 156, 0.15);
+            border-color: var(--hot-pink);
+            color: var(--hot-pink);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-secondary);
+            font-size: 18px;
+            display: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 10% auto;
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .warning-icon {
+            color: var(--electric-blue);
+            font-size: 32px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--electric-blue);
+        }
+
+        .modal-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .modal-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-button.cancel {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .modal-button.cancel:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .modal-button.proceed {
+            background: var(--electric-blue);
+            color: white;
+            border: 2px solid var(--electric-blue);
+        }
+
+        .modal-button.proceed:hover {
+            background: var(--vivid-purple);
+            border-color: var(--vivid-purple);
+            transform: translateY(-2px);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--text-secondary);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: var(--electric-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Discover the generative AI models</h1>
+            <p class="hero-subtitle">Compare and test advanced AI models offered by Corea Starstroupe.</p>
+            <div class="search-container">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" class="search-input" placeholder="Search models by name, capability, or use case..." id="searchInput">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <div class="filter-tab active featured" data-filter="all">
+                <span class="material-icons">star</span>
+                Featured
+            </div>
+            <div class="filter-tab" data-filter="all">
+                <span class="material-icons">apps</span>
+                All Models
+            </div>
+            <div class="filter-tab llm" data-filter="llm">
+                <span class="material-icons">chat</span>
+                LLM
+            </div>
+            <div class="filter-tab image" data-filter="image">
+                <span class="material-icons">image</span>
+                Image
+            </div>
+            <div class="filter-tab vision" data-filter="vision">
+                <span class="material-icons">visibility</span>
+                Vision
+            </div>
+        </div>
+
+        <div class="section-header">
+            <div class="section-title">
+                <span class="material-icons">psychology</span>
+                AI Models
+                <span class="model-count" id="modelCount">(16)</span>
+            </div>
+            <div class="section-actions">
+                <div class="sort-dropdown">
+                    <span class="material-icons">sort</span>
+                    Sorted by Parameters
+                    <span class="material-icons">expand_more</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="model-list" id="modelList">
+            <!-- LLM Models -->
+            <div class="model-item" data-url="nexora Cerebrus-X Archon" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Cerebrus-X Archon
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>405B Parameters</span>
+                        <span>8.2K Avg Tokens</span>
+                        <span>256k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Cerebrus-X v3.1-A (PrimeMind)" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Cerebrus-X v3.1-A (PrimeMind)
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>235B Parameters</span>
+                        <span>6.8K Avg Tokens</span>
+                        <span>200k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Cerebrus-X v3.1-B (EdgeSpire)" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Cerebrus-X v3.1-B (EdgeSpire)
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>175B Parameters</span>
+                        <span>5.4K Avg Tokens</span>
+                        <span>180k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Cerebrus-X" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Cerebrus-X
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>70B Parameters</span>
+                        <span>3.2K Avg Tokens</span>
+                        <span>128k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Fluxborn v2.2 7B Adaptive" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Fluxborn v2.2 7B Adaptive
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>7B Parameters</span>
+                        <span>1.8K Avg Tokens</span>
+                        <span>32k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Frostbyte" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Frostbyte
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>30B Parameters</span>
+                        <span>2.6K Avg Tokens</span>
+                        <span>64k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Halcyon-Vision" data-category="llm vision">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Halcyon-Vision
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>90B Parameters</span>
+                        <span>4.1K Avg Tokens</span>
+                        <span>128k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag vision">Vision</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Luminsynth-Erractic" data-category="llm" data-warning="true">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Luminsynth-Erractic
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>13B Parameters</span>
+                        <span>2.1K Avg Tokens</span>
+                        <span>96k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora VantaCore" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        VantaCore
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>65B Parameters</span>
+                        <span>3.7K Avg Tokens</span>
+                        <span>128k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora RogueMini 8B" data-category="llm" data-warning="true">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        RogueMini 8B
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>8B Parameters</span>
+                        <span>1.9K Avg Tokens</span>
+                        <span>32k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora ZenithPath" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        ZenithPath
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>22B Parameters</span>
+                        <span>2.4K Avg Tokens</span>
+                        <span>100k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Skybind v1.9" data-category="llm">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Skybind v1.9
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>45B Parameters</span>
+                        <span>3.1K Avg Tokens</span>
+                        <span>85k Context</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag llm">LLM</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <!-- Vision Models -->
+            <div class="model-item" data-url="nexora Retina" data-category="vision">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Retina
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>12B Parameters</span>
+                        <span>1.5K Avg Tokens</span>
+                        <span>Vision Model</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag vision">Vision</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Sightflare" data-category="vision">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Sightflare
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>8B Parameters</span>
+                        <span>1.2K Avg Tokens</span>
+                        <span>Vision Model</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag vision">Vision</span>
+                </div>
+            </div>
+
+            <!-- Image Generation Models -->
+            <div class="model-item" data-url="nexora Concept Grid" data-category="image">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Concept Grid
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>6B Parameters</span>
+                        <span>512 Avg Tokens</span>
+                        <span>High Resolution</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag image">Image</span>
+                    <span class="tag serverless">Serverless</span>
+                </div>
+            </div>
+
+            <div class="model-item" data-url="nexora Lumen Experiment" data-category="image">
+                <div class="model-icon"></div>
+                <div class="model-info">
+                    <div class="model-name">
+                        Lumen Experiment
+                        <span class="material-icons redirect-arrow">arrow_outward</span>
+                    </div>
+                    <div class="model-specs">
+                        <span>4B Parameters</span>
+                        <span>384 Avg Tokens</span>
+                        <span>Ultra High Quality</span>
+                    </div>
+                </div>
+                <div class="model-tags">
+                    <span class="tag image">Image</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <span class="material-icons" style="font-size: 48px; margin-bottom: 16px;">search_off</span>
+            <div>No models found matching your search criteria.</div>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <span class="material-icons warning-icon">warning</span>
+                <h2 class="modal-title">AI Model Warning</h2>
+            </div>
+            <div class="modal-text">
+                This AI model is designed for humorous purposes and entertainment. While it may occasionally provide accurate information, it is primarily unconventional, bold, and experimental in nature. This model is not suited for sensitive individuals or serious applications. Please use with discretion and understand that responses may be unpredictable or inappropriate for certain contexts.
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" id="cancelBtn">Cancel</button>
+                <button class="modal-button proceed" id="proceedBtn">I Understand, Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modelItems = document.querySelectorAll('.model-item[data-url]');
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            const searchInput = document.getElementById('searchInput');
+            const modelCount = document.getElementById('modelCount');
+            const noResults = document.getElementById('noResults');
+            const modal = document.getElementById('warningModal');
+            const closeBtn = document.querySelector('.close');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const proceedBtn = document.getElementById('proceedBtn');
+            
+            let currentFilter = 'all';
+            let currentSearch = '';
+            let pendingUrl = '';
+
+            // Add click handlers for model redirections
+            modelItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    const hasWarning = this.getAttribute('data-warning') === 'true';
+                    const modelName = this.querySelector('.model-name').textContent.trim();
+                    
+                    if (url) {
+                        // Check if model name contains "Erractic" or "RogueMind" (case insensitive)
+                        if (hasWarning || modelName.toLowerCase().includes('erractic') || modelName.toLowerCase().includes('roguemind')) {
+                            pendingUrl = url;
+                            modal.style.display = 'block';
+                        } else {
+                            window.open(url, '_blank');
+                        }
+                    }
+                });
+            });
+
+            // Modal event handlers
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                pendingUrl = '';
+            });
+
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                pendingUrl = '';
+            });
+
+            proceedBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                if (pendingUrl) {
+                    window.open(pendingUrl, '_blank');
+                    pendingUrl = '';
+                }
+            });
+
+            // Close modal when clicking outside of it
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    pendingUrl = '';
+                }
+            });
+
+            // Filter functionality
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    currentFilter = this.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase();
+                applyFilters();
+            });
+
+            function applyFilters() {
+                let visibleCount = 0;
+                
+                modelItems.forEach(item => {
+                    const modelName = item.querySelector('.model-name').textContent.toLowerCase();
+                    const categories = item.getAttribute('data-category').split(' ');
+                    
+                    // Check if item matches search
+                    const matchesSearch = currentSearch === '' || modelName.includes(currentSearch);
+                    
+                    // Check if item matches filter
+                    const matchesFilter = currentFilter === 'all' || categories.includes(currentFilter);
+                    
+                    if (matchesSearch && matchesFilter) {
+                        item.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                // Update model count
+                modelCount.textContent = `(${visibleCount})`;
+                
+                // Show/hide no results message
+                if (visibleCount === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+
+            // Initialize filters
+            applyFilters();
+        });
+    </script>
+</body>
+</html>

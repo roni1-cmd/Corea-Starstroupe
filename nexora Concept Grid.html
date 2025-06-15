@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corea Starstroupe - Simulation</title>
+    <link rel ="icon" href="Credits.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --electric-blue: rgb(63, 159, 255);
+            --vivid-purple: rgb(156, 77, 255);
+            --hot-pink: rgb(255, 77, 156);
+            --magenta: rgb(255, 46, 178);
+            --rose-pink: rgb(255, 118, 178);
+            --deep-violet: rgb(106, 0, 255);
+            
+            /* Light mode colors */
+            --primary-color: var(--electric-blue);
+            --primary-dark: rgb(45, 139, 235);
+            --secondary-color: var(--vivid-purple);
+            --accent-color: var(--hot-pink);
+            --success-color: #137333;
+            --warning-color: #f9ab00;
+            --error-color: #d93025;
+            --background: #000000;
+            --surface: #000000;
+            --surface-secondary: #1a1a1a;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --border: #dadce0;
+            --border-light: #e8eaed;
+            --shadow-sm: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --shadow-md: 0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+            --shadow-lg: 0 4px 8px 3px rgba(60,64,67,0.15), 0 1px 3px rgba(60,64,67,0.3);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #000000;
+                --surface: #000000;
+                --surface-secondary: #1a1a1a;
+                --text-primary: #ffffff;
+                --text-secondary: #b3b3b3;
+                --border: #404040;
+                --border-light: #333333;
+                --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.5), 0 1px 3px 1px rgba(0,0,0,0.3);
+                --shadow-md: 0 1px 2px 0 rgba(0,0,0,0.5), 0 2px 6px 2px rgba(0,0,0,0.3);
+                --shadow-lg: 0 4px 8px 3px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.5);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, input, textarea, select, button {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            color: var(--text-primary);
+        }
+
+        .logo-main {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+
+        .playground-badge {
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-left: 1rem;
+            opacity: 0.8;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: calc(100vh - 80px);
+            background: var(--background);
+        }
+
+        .options-sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .options-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .option-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .option-label .material-icons {
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .aspect-ratio-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: var(--surface);
+            color: var(--text-primary);
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .aspect-ratio-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(63, 159, 255, 0.1);
+        }
+
+        .slider-container {
+            position: relative;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .slider-value {
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            min-width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .accept-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: var(--surface);
+            color: var(--text-primary);
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .accept-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(63, 159, 255, 0.1);
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            gap: 2rem;
+            background: var(--background);
+        }
+
+        .generation-section {
+            background: var(--surface);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            background: var(--background);
+            color: var(--text-primary);
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(63, 159, 255, 0.1);
+        }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .upload-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(63, 159, 255, 0.1);
+        }
+
+        .upload-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-status.uploaded {
+            color: var(--success-color);
+        }
+
+        .uploaded-preview {
+            max-width: 60px;
+            max-height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .generate-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .generate-btn:hover {
+            background: rgb(235, 57, 136);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mobile-controls-btn {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .mobile-controls-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .mobile-controls {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .mobile-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .mobile-close-btn:hover {
+            background: var(--surface-secondary);
+        }
+
+        .results-section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            min-height: 400px;
+        }
+
+        .results-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .results-placeholder .material-icons {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .loading-state {
+            display: none;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .image-result {
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .image-container {
+            position: relative;
+            background: var(--surface-secondary);
+        }
+
+        .generated-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .overlay-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .overlay-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .image-info {
+            padding: 1rem;
+        }
+
+        .image-prompt {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .image-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-success {
+            background: rgba(19, 115, 51, 0.1);
+            border: 1px solid rgba(19, 115, 51, 0.2);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background: rgba(217, 48, 37, 0.1);
+            border: 1px solid rgba(217, 48, 37, 0.2);
+            color: var(--error-color);
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .options-sidebar {
+                display: none;
+            }
+            
+            .mobile-controls-btn {
+                display: flex;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .logo-main {
+                font-size: 1rem;
+            }
+            
+            .logo-sub {
+                font-size: 0.65rem;
+            }
+
+            .action-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .upload-section {
+                justify-content: flex-start;
+            }
+
+            .generate-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="Credits.png" alt="Logo" class="logo-icon" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+                <div class="playground-badge">Testing Waters | nexora Concept Grid </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="options-sidebar">
+            <h3 class="options-title">Options</h3>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">aspect_ratio</span>
+                    Aspect Ratio
+                </div>
+                <select id="aspect-ratio-select" class="aspect-ratio-select">
+                    <option value="1:1" data-width="1024" data-height="1024" selected>1:1 (Square)</option>
+                    <option value="4:3" data-width="1024" data-height="768">4:3 (Landscape)</option>
+                    <option value="3:4" data-width="768" data-height="1024">3:4 (Portrait)</option>
+                    <option value="16:9" data-width="1024" data-height="576">16:9 (Wide)</option>
+                    <option value="9:16" data-width="576" data-height="1024">9:16 (Tall)</option>
+                    <option value="2:3" data-width="683" data-height="1024">2:3 (Photo)</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">tune</span>
+                    Guidance Scale
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span></span>
+                        <span class="slider-value" id="guidance-value">7.5</span>
+                    </div>
+                    <input type="range" id="guidance-slider" class="slider" min="0" max="20" step="0.5" value="7.5">
+                </div>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">layers</span>
+                    Num Inference Steps
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span></span>
+                        <span class="slider-value" id="steps-value">20</span>
+                    </div>
+                    <input type="range" id="steps-slider" class="slider" min="1" max="50" step="1" value="20">
+                </div>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">casino</span>
+                    Seed
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span></span>
+                        <span class="slider-value" id="seed-value">Random</span>
+                    </div>
+                    <input type="range" id="seed-slider" class="slider" min="0" max="999999" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">check_circle</span>
+                    Accept
+                </div>
+                <select class="accept-select">
+                    <option value="image/jpeg">image/jpeg</option>
+                    <option value="image/png">image/png</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="generation-section">
+                <form id="generation-form">
+                    <div class="form-group">
+                        <label class="form-label" for="prompt">
+                            Image Prompt*
+                        </label>
+                        <textarea 
+                            id="prompt" 
+                            class="form-input" 
+                            placeholder="Describe the image you want to generate..."
+                            required>A professional headshot of a confident business executive in a modern office setting, natural lighting, high resolution</textarea>
+                    </div>
+
+                    <div class="action-row">
+                        <div class="upload-section">
+                            <button type="button" class="upload-btn" id="upload-btn">
+                                <span class="material-icons">cloud_upload</span>
+                                Upload Reference
+                            </button>
+                            <div class="upload-status" id="upload-status">
+                                <span>No file selected</span>
+                            </div>
+                            <input type="file" id="file-input" accept="image/jpeg,image/png" style="display: none;">
+                        </div>
+
+                        <button type="submit" class="generate-btn">
+                            Generate
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="results-section">
+                <div id="loading-state" class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <div>Generating your image...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div id="results-container">
+                    <div class="results-placeholder">
+                        <span class="material-icons">image</span>
+                        <h3>Output will be displayed here</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Controls Button -->
+    <button class="mobile-controls-btn" id="mobile-controls-btn">
+        <span class="material-icons">tune</span>
+    </button>
+
+    <!-- Mobile Controls Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay">
+        <div class="mobile-controls">
+            <button class="mobile-close-btn" id="mobile-close-btn">
+                <span class="material-icons">close</span>
+            </button>
+            
+            <h3 class="options-title">Options</h3>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">aspect_ratio</span>
+                    Aspect Ratio
+                </div>
+                <select id="mobile-aspect-ratio-select" class="aspect-ratio-select">
+                    <option value="1:1" data-width="1024" data-height="1024" selected>1:1 (Square)</option>
+                    <option value="4:3" data-width="1024" data-height="768">4:3 (Landscape)</option>
+                    <option value="3:4" data-width="768" data-height="1024">3:4 (Portrait)</option>
+                    <option value="16:9" data-width="1024" data-height="576">16:9 (Wide)</option>
+                    <option value="9:16" data-width="576" data-height="1024">9:16 (Tall)</option>
+                    <option value="2:3" data-width="683" data-height="1024">2:3 (Photo)</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">tune</span>
+                    Guidance Scale
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span></span>
+                        <span class="slider-value" id="mobile-guidance-value">7.5</span>
+                    </div>
+                    <input type="range" id="mobile-guidance-slider" class="slider" min="0" max="20" step="0.5" value="7.5">
+                </div>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">layers</span>
+                    Num Inference Steps
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span></span>
+                        <span class="slider-value" id="mobile-steps-value">20</span>
+                    </div>
+                    <input type="range" id="mobile-steps-slider" class="slider" min="1" max="50" step="1" value="20">
+                </div>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">casino</span>
+                    Seed
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span></span>
+                        <span class="slider-value" id="mobile-seed-value">Random</span>
+                    </div>
+                    <input type="range" id="mobile-seed-slider" class="slider" min="0" max="999999" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="option-group">
+                <div class="option-label">
+                    <span class="material-icons">check_circle</span>
+                    Accept
+                </div>
+                <select class="accept-select" id="mobile-accept-select">
+                    <option value="image/jpeg">image/jpeg</option>
+                    <option value="image/png">image/png</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentWidth = 1024;
+        let currentHeight = 1024;
+        let uploadedImageFile = null;
+
+        // Initialize controls
+        function initializeControls() {
+            const aspectRatioSelect = document.getElementById('aspect-ratio-select');
+            const mobileAspectRatioSelect = document.getElementById('mobile-aspect-ratio-select');
+            const guidanceSlider = document.getElementById('guidance-slider');
+            const mobileGuidanceSlider = document.getElementById('mobile-guidance-slider');
+            const stepsSlider = document.getElementById('steps-slider');
+            const mobileStepsSlider = document.getElementById('mobile-steps-slider');
+            const seedSlider = document.getElementById('seed-slider');
+            const mobileSeedSlider = document.getElementById('mobile-seed-slider');
+
+            // Sync desktop and mobile controls
+            function syncAspectRatio(source, target) {
+                target.value = source.value;
+                const selectedOption = source.options[source.selectedIndex];
+                currentWidth = parseInt(selectedOption.dataset.width);
+                currentHeight = parseInt(selectedOption.dataset.height);
+            }
+
+            function syncSlider(source, target, valueElement) {
+                target.value = source.value;
+                valueElement.textContent = source.value === '0' && source.id.includes('seed') ? 'Random' : source.value;
+            }
+
+            // Aspect ratio handlers
+            aspectRatioSelect.addEventListener('change', function() {
+                syncAspectRatio(this, mobileAspectRatioSelect);
+            });
+
+            mobileAspectRatioSelect.addEventListener('change', function() {
+                syncAspectRatio(this, aspectRatioSelect);
+            });
+
+            // Guidance scale handlers
+            guidanceSlider.addEventListener('input', function() {
+                document.getElementById('guidance-value').textContent = this.value;
+                syncSlider(this, mobileGuidanceSlider, document.getElementById('mobile-guidance-value'));
+            });
+
+            mobileGuidanceSlider.addEventListener('input', function() {
+                document.getElementById('mobile-guidance-value').textContent = this.value;
+                syncSlider(this, guidanceSlider, document.getElementById('guidance-value'));
+            });
+
+            // Steps handlers
+            stepsSlider.addEventListener('input', function() {
+                document.getElementById('steps-value').textContent = this.value;
+                syncSlider(this, mobileStepsSlider, document.getElementById('mobile-steps-value'));
+            });
+
+            mobileStepsSlider.addEventListener('input', function() {
+                document.getElementById('mobile-steps-value').textContent = this.value;
+                syncSlider(this, stepsSlider, document.getElementById('steps-value'));
+            });
+
+            // Seed handlers
+            seedSlider.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                const displayValue = value === 0 ? 'Random' : value;
+                document.getElementById('seed-value').textContent = displayValue;
+                document.getElementById('mobile-seed-value').textContent = displayValue;
+                mobileSeedSlider.value = this.value;
+            });
+
+            mobileSeedSlider.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                const displayValue = value === 0 ? 'Random' : value;
+                document.getElementById('mobile-seed-value').textContent = displayValue;
+                document.getElementById('seed-value').textContent = displayValue;
+                seedSlider.value = this.value;
+            });
+        }
+
+        // Initialize mobile controls
+        function initializeMobileControls() {
+            const mobileControlsBtn = document.getElementById('mobile-controls-btn');
+            const mobileOverlay = document.getElementById('mobile-overlay');
+            const mobileCloseBtn = document.getElementById('mobile-close-btn');
+
+            mobileControlsBtn.addEventListener('click', () => {
+                mobileOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+
+            mobileCloseBtn.addEventListener('click', () => {
+                mobileOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            mobileOverlay.addEventListener('click', (e) => {
+                if (e.target === mobileOverlay) {
+                    mobileOverlay.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Initialize file upload
+        function initializeFileUpload() {
+            const uploadBtn = document.getElementById('upload-btn');
+            const fileInput = document.getElementById('file-input');
+            const uploadStatus = document.getElementById('upload-status');
+
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleFileUpload(file) {
+            if (!file.type.match('image/(jpeg|png)')) {
+                showAlert('Please upload a JPEG or PNG image', 'error');
+                return;
+            }
+
+            uploadedImageFile = file;
+            const uploadStatus = document.getElementById('upload-status');
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadStatus.innerHTML = `
+                    <img src="${e.target.result}" alt="Uploaded" class="uploaded-preview">
+                    <span>${file.name}</span>
+                `;
+                uploadStatus.classList.add('uploaded');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function generateImage() {
+            const apiKey = 'fw_3ZWXAxAD6BWE4pgQkvkAqem3';
+            const prompt = document.getElementById('prompt').value.trim();
+            const guidance = parseFloat(document.getElementById('guidance-slider').value);
+            const steps = parseInt(document.getElementById('steps-slider').value);
+            const seedValue = parseInt(document.getElementById('seed-slider').value);
+            const seed = seedValue === 0 ? Math.floor(Math.random() * 999999) : seedValue;
+
+            if (!prompt) {
+                showAlert('Please enter a prompt for the image', 'error');
+                return;
+            }
+
+            const submitBtn = document.querySelector('.generate-btn');
+            const loadingState = document.getElementById('loading-state');
+            const resultsContainer = document.getElementById('results-container');
+            const progressFill = document.getElementById('progress-fill');
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+            loadingState.style.display = 'block';
+            resultsContainer.querySelector('.results-placeholder')?.remove();
+
+            // Simulate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                progressFill.style.width = progress + '%';
+            }, 200);
+
+            try {
+                const requestBody = {
+                    prompt: prompt,
+                    width: currentWidth,
+                    height: currentHeight,
+                    num_inference_steps: steps,
+                    guidance_scale: guidance,
+                    seed: seed
+                };
+
+                const response = await fetch('https://api.fireworks.ai/inference/v1/workflows/accounts/fireworks/models/flux-1-schnell-fp8/text_to_image', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+                
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+
+                const imageData = {
+                    id: Date.now(),
+                    url: imageUrl,
+                    prompt: prompt,
+                    width: currentWidth,
+                    height: currentHeight,
+                    steps: steps,
+                    guidance: guidance,
+                    seed: seed,
+                    timestamp: new Date().toISOString()
+                };
+
+                displayImage(imageData);
+                showAlert('Image generated successfully!', 'success');
+
+            } catch (error) {
+                console.error('Error generating image:', error);
+                showAlert(`Failed to generate image: ${error.message}`, 'error');
+                clearInterval(progressInterval);
+            } finally {
+                // Reset UI state
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate';
+                loadingState.style.display = 'none';
+                progressFill.style.width = '0%';
+            }
+        }
+
+        function displayImage(imageData) {
+            const resultsContainer = document.getElementById('results-container');
+            
+            const imageElement = document.createElement('div');
+            imageElement.className = 'image-result';
+            imageElement.innerHTML = `
+                <div class="image-container">
+                    <img src="${imageData.url}" alt="${imageData.prompt}" class="generated-image" />
+                    <div class="image-overlay">
+                        <button class="overlay-btn" onclick="downloadImage('${imageData.url}', '${imageData.id}')" title="Download">
+                            <span class="material-icons">download</span>
+                        </button>
+                        <button class="overlay-btn" onclick="copyToClipboard('${imageData.url}')" title="Copy">
+                            <span class="material-icons">content_copy</span>
+                        </button>
+                        <button class="overlay-btn" onclick="deleteImage(this)" title="Delete">
+                            <span class="material-icons">delete</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="image-info">
+                    <div class="image-prompt">"${imageData.prompt}"</div>
+                    <div class="image-meta">
+                        <span>${imageData.width}×${imageData.height}</span>
+                        <span>Steps: ${imageData.steps}</span>
+                        <span>Guidance: ${imageData.guidance}</span>
+                        <span>Seed: ${imageData.seed}</span>
+                    </div>
+                </div>
+            `;
+            
+            resultsContainer.insertBefore(imageElement, resultsContainer.firstChild);
+        }
+
+        function downloadImage(url, filename) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `nexora-${filename}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function copyToClipboard(url) {
+            fetch(url)
+                .then(res => res.blob())
+                .then(blob => {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    navigator.clipboard.write([item]);
+                    showAlert('Image copied to clipboard!', 'success');
+                })
+                .catch(() => {
+                    showAlert('Failed to copy image to clipboard', 'error');
+                });
+        }
+
+        function deleteImage(button) {
+            if (confirm('Are you sure you want to delete this image?')) {
+                button.closest('.image-result').remove();
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <span class="material-icons">${type === 'success' ? 'check_circle' : 'error'}</span>
+                <span>${message}</span>
+            `;
+            
+            const resultsSection = document.querySelector('.results-section');
+            resultsSection.insertBefore(alertDiv, resultsSection.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Form submission handler
+        document.getElementById('generation-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateImage();
+        });
+
+        // Initialize everything when page loads
+        window.addEventListener('load', function() {
+            initializeControls();
+            initializeMobileControls();
+            initializeFileUpload();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                generateImage();
+            }
+        });
+    </script>
+</body>
+</html>
