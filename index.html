@@ -117,7 +117,7 @@
             padding: 0 32px;
             max-width: 1400px;
             margin: 0 auto;
-            gap: 8px; /* Further reduced gap for closer alignment on desktop */
+            gap: 8px;
         }
 
         .content {
@@ -132,7 +132,7 @@
             font-weight: 700;
             line-height: 1.2;
             color: #fff;
-            margin-bottom: 12px; /* Further reduced margin for tighter layout */
+            margin-bottom: 12px;
         }
 
         .hero-description {
@@ -144,12 +144,12 @@
         }
 
         .hero-image {
-            max-width: 600px; /* Increased max-width for larger image on desktop */
+            max-width: 600px;
             width: 100%;
             height: auto;
             border-radius: 12px;
             object-fit: cover;
-            margin-left: 8px; /* Reduced margin for closer alignment */
+            margin-left: 8px;
         }
 
         /* Products section */
@@ -429,6 +429,69 @@
             color: #3F9FFF;
         }
 
+        /* Test Waters Section */
+        .test-waters-section {
+            position: relative;
+            background: #111;
+            padding: 80px 32px;
+            text-align: center;
+            overflow: hidden;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .test-waters-section video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .test-waters-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .test-waters-title {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .test-waters-description {
+            font-size: clamp(14px, 2vw, 16px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .test-waters-button {
+            display: inline-block;
+            color: #fff;
+            background: #3F9FFF;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .test-waters-button:hover {
+            background: #2a8cff;
+        }
+
         /* Footer */
         .footer {
             position: relative;
@@ -553,6 +616,23 @@
 
             .hero-image {
                 max-width: 90%;
+            }
+
+            .test-waters-section {
+                padding: 60px 20px;
+            }
+
+            .test-waters-title {
+                font-size: clamp(24px, 5vw, 36px);
+            }
+
+            .test-waters-description {
+                font-size: clamp(12px, 2vw, 14px);
+            }
+
+            .test-waters-button {
+                padding: 10px 20px;
+                font-size: 14px;
             }
         }
 
@@ -690,6 +770,23 @@
             .hero-description {
                 font-size: clamp(12px, 2vw, 13px);
             }
+
+            .test-waters-section {
+                padding: 40px 16px;
+            }
+
+            .test-waters-title {
+                font-size: clamp(20px, 5vw, 28px);
+            }
+
+            .test-waters-description {
+                font-size: clamp(12px, 2vw, 13px);
+            }
+
+            .test-waters-button {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -811,6 +908,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="test-waters-section">
+        <video autoplay muted loop>
+            <source src="water.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="test-waters-content">
+            <h2 class="test-waters-title">Want to Test the Waters?</h2>
+            <p class="test-waters-description">Explore our open-source libraries and tools to start building with COREA's cutting-edge AI technologies today.</p>
+            <a href="nexoracog.netlify.app/libraries" class="test-waters-button">Get Started</a>
         </div>
     </section>
 
