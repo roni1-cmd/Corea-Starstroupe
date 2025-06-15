@@ -278,12 +278,38 @@
             display: none;
         }
 
-        .model-icon {
+        .model-item[data-category~="llm"] .model-icon {
             width: 48px;
             height: 48px;
             border-radius: 12px;
             margin-right: 20px;
             background-image: url('Nexora.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .model-item[data-category~="vision"] .model-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-right: 20px;
+            background-image: url('vision.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .model-item[data-category~="image"] .model-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-right: 20px;
+            background-image: url('imagegen.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -536,7 +562,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Cerebrus-X Archon
+                        nexora Cerebrus-X Archon
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -555,7 +581,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Cerebrus-X v3.1-A (PrimeMind)
+                        nexora Cerebrus-X v3.1-A (PrimeMind)
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -573,7 +599,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Cerebrus-X v3.1-B (EdgeSpire)
+                        nexora Cerebrus-X v3.1-B (EdgeSpire)
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -592,7 +618,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Cerebrus-X
+                        nexora Cerebrus-X
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -611,7 +637,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Fluxborn v2.2 7B Adaptive
+                       nexora Fluxborn v2.2 7B Adaptive
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -629,7 +655,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Frostbyte
+                       nexora Frostbyte
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -648,7 +674,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Halcyon-Vision
+                        nexora Halcyon-Vision
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -668,7 +694,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Luminsynth-Erractic
+                        nexora Luminsynth-Erractic
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -686,7 +712,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        VantaCore
+                        nexora VantaCore
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -705,7 +731,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        RogueMini 8B
+                        nexora RogueMini 8B
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -723,7 +749,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        ZenithPath
+                        nexora ZenithPath
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -742,7 +768,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Skybind v1.9
+                        nexora Skybind v1.9
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -762,7 +788,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Retina
+                       nexora Retina
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -781,7 +807,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Sightflare
+                      nexora Sightflare
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -800,7 +826,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Concept Grid
+                       nexora Concept Grid
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -819,7 +845,7 @@
                 <div class="model-icon"></div>
                 <div class="model-info">
                     <div class="model-name">
-                        Lumen Experiment
+                        nexora Lumen Experiment
                         <span class="material-icons redirect-arrow">arrow_outward</span>
                     </div>
                     <div class="model-specs">
@@ -843,7 +869,7 @@
     <!-- Warning Modal -->
     <div id="warningModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close">×</span>
             <div class="modal-header">
                 <span class="material-icons warning-icon">warning</span>
                 <h2 class="modal-title">AI Model Warning</h2>
