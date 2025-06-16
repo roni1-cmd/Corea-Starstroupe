@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auralis NLP</title>
+    <link rel="icon" href="Auralis.png" type="image/png">
+    <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Global invisible scrollbars */
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        *:hover::-webkit-scrollbar-thumb {
+            opacity: 1;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #000000;
+            border-bottom: 1px solid #1f1f1f;
+            padding: 12px 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header-branding {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            font-weight: 400;
+            color: #71717a;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .model-selector-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #e5e5e5;
+            white-space: nowrap;
+        }
+
+        .model-selector {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #ffffff;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .model-selector option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+        }
+
+        .model-logo {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .model-selector:focus {
+            outline: none;
+            border-color: rgb(63, 159, 255);
+        }
+
+        .hide-sidebar-btn {
+            background: #1f1f1f;
+            border: 1px solid #333;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .hide-sidebar-btn:hover {
+            background: #2a2a2a;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: #000000;
+            border-right: 1px solid #1f1f1f;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.hidden {
+            width: 0;
+            border-right: none;
+            overflow: hidden;
+        }
+
+        .sidebar-content {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            padding: 80px 20px 20px;
+            flex: 1;
+        }
+
+        .sidebar.hidden .sidebar-content {
+            opacity: 0;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e5e5e5;
+            margin-bottom: 8px;
+        }
+
+        .input-label .material-icons {
+            font-size: 18px;
+            color: rgb(156, 77, 255);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+
+        .file-input-display:hover {
+            background: #222;
+            border-color: rgb(156, 77, 255);
+        }
+
+        .file-input-display .material-icons {
+            color: rgb(156, 77, 255);
+            font-size: 20px;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            background: #222;
+            border-color: rgb(63, 159, 255);
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .extract-btn, .analyze-btn, .extract-more-btn {
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .extract-btn {
+            background: rgb(255, 77, 156);
+        }
+
+        .extract-btn:hover {
+            background: rgb(255, 46, 178);
+        }
+
+        .extract-more-btn {
+            background: rgb(255, 118, 178);
+            display: none;
+        }
+
+        .extract-more-btn.visible {
+            display: flex;
+        }
+
+        .extract-more-btn:hover {
+            background: rgb(255, 77, 156);
+        }
+
+        .analyze-btn {
+            background: rgb(63, 159, 255);
+            display: none;
+        }
+
+        .analyze-btn:hover {
+            background: rgb(156, 77, 255);
+        }
+
+        .analyze-btn.visible {
+            display: flex;
+        }
+
+        .extract-btn .material-icons, .analyze-btn .material-icons, .extract-more-btn .material-icons {
+            font-size: 20px;
+        }
+
+        .view-extracted-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #e5e5e5;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .view-extracted-btn.visible {
+            display: flex;
+        }
+
+        .view-extracted-btn:hover {
+            background: #222;
+            border-color: #444;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .brand-section {
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .brand-section.hidden {
+            display: none;
+        }
+
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 300;
+            color: #71717a;
+            margin-bottom: 12px;
+        }
+
+        .brand-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .brand-title-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .brand-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .brand-subtitle {
+            font-size: 16px;
+            color: #71717a;
+            font-weight: 400;
+        }
+
+        .analysis-container {
+            width: 100%;
+            max-width: 900px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .analysis-container.visible {
+            display: flex;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            justify-content: center;
+            color: #ffffff;
+            flex-direction: column;
+        }
+
+        .status-indicator.processing {
+            color: #ffffff;
+        }
+
+        .status-indicator.error {
+            color: rgb(255, 46, 178);
+        }
+
+        .status-indicator.success {
+            color: rgb(255, 118, 178);
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .loading-bar-fill {
+            width: 0;
+            height: 100%;
+            background: rgb(63, 159, 255);
+            transition: width 0.1s linear;
+        }
+
+        .notification {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: #e5e5e5;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .notification.visible {
+            display: flex;
+        }
+
+        .analysis-content {
+            width: 100%;
+            max-width: 900px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e5e5e5;
+            margin-bottom: 20px;
+        }
+
+        .analysis-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 16px 0 8px;
+        }
+
+        .analysis-content strong {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .show-analysis-btn {
+            background: rgb(156, 77, 255);
+            color: #ffffff;
+        }
+
+        .show-analysis-btn:hover {
+            background: rgb(106, 0, 255);
+        }
+
+        .export-dropdown-container {
+            position: relative;
+            display: inline-block;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .export-btn {
+            background: #1a1a1a;
+            color: #e5e5e5;
+            border: 1px solid #333;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .export-btn:hover {
+            background: #222;
+            border-color: #444;
+        }
+
+        .export-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .export-dropdown.visible {
+            display: block;
+        }
+
+        .export-option {
+            padding: 10px 16px;
+            color: #e5e5e5;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .export-option:hover {
+            background: #222;
+        }
+
+        /* Flashcard Styles */
+        .flashcard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 10px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .flashcard {
+            width: 250px;
+            height: 150px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #e5e5e5;
+            overflow: hidden;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Circular Progress Graph for Academic Integrity */
+        .integrity-graph {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+        }
+
+        .integrity-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                rgb(63, 159, 255) 0% var(--human-percent),
+                rgb(255, 77, 156) var(--human-percent) var(--ai-percent),
+                rgb(156, 77, 255) var(--ai-percent) 100%
+            );
+        }
+
+        .integrity-circle-inner {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 130px;
+            height: 130px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #e5e5e5;
+        }
+
+        .integrity-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #e5e5e5;
+            position: relative;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            background: #222;
+            color: #e5e5e5;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            z-index: 1000;
+        }
+
+        .legend-item:hover .tooltip {
+            visibility: visible;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #71717a;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #222;
+            color: #ffffff;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 16px;
+            background: #000000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .modal-textarea:focus {
+            outline: none;
+            border-color: rgb(63, 159, 255);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-btn {
+            background: rgb(63, 159, 255);
+            color: #ffffff;
+        }
+
+        .save-btn:hover {
+            background: rgb(156, 77, 255);
+        }
+
+        .cancel-btn {
+            background: #374151;
+            color: #d1d5db;
+            border: 1px solid #4b5563;
+        }
+
+        .cancel-btn:hover {
+            background: #4b5563;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 300px;
+            }
+            
+            .brand-title {
+                font-size: 24px;
+            }
+            
+            .chat-area {
+                padding: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .brand-title-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px 15px;
+            }
+
+            .header-branding {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .header-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .model-selector-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .model-selector {
+                width: 100%;
+            }
+
+            .hide-sidebar-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-branding">
+                <div class="logo-icon">
+                    <img src="Credits.png" alt="Logo" />
+                </div>
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="model-selector-container">
+                    <span>You are using the model:</span>
+                    <select id="modelSelector" class="model-selector">
+                        <option value="accounts/fireworks/models/llama4-maverick-instruct-basic">
+                            <img src="Auralis.png" alt="Model Logo" class="model-logo">Auralis BioParse 6
+                        </option>
+                        <option value="accounts/fireworks/models/deepseek-r1">
+                            <img src="Auralis.png" alt="Model Logo" class="model-logo">Auralis Civica 0X9	
+                        </option>
+                        <option value="accounts/fireworks/models/mixtral-8x22b-instruct">
+                            <img src="Auralis.png" alt="Model Logo" class="model-logo">Auralis Affecta 3X
+                        </option>
+                        <option value="accounts/fireworks/models/llama-v3p1-405b-instruct-long">
+                            <img src="Auralis.png" alt="Model Logo" class="model-logo">Auralis Quantor 11
+                        </option>
+                    </select>
+                </div>
+                <button class="hide-sidebar-btn" onclick="toggleSidebar()">
+                    <span class="material-icons">visibility_off</span>
+                    <span>Hide Sidebar</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-title">Options</div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span class="material-icons">description</span>
+                        Upload Doc
+                    </div>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="docxFile" accept=".docx" class="file-input" />
+                        <div class="file-input-display">
+                            <span class="material-icons">attach_file</span>
+                            <span id="file-name">Choose DOCX file...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="extract-btn" onclick="extractDocument()">
+                    <span class="material-icons">text_snippet</span>
+                    Extract Text
+                </button>
+
+                <button class="extract-more-btn" id="extractMoreBtn" onclick="extractDocument()">
+                    <span class="material-icons">refresh</span>
+                    Extract More?
+                </button>
+
+                <button class="view-extracted-btn" id="viewExtractedBtn" onclick="showExtractedModal()">
+                    <span class="material-icons">visibility</span>
+                    View Extracted Text
+                </button>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span class="material-icons">settings</span>
+                        Analysis Type
+                    </div>
+                    <select id="task">
+                        <option value="summarize">Document Summary</option>
+                        <option value="sentiment">Sentiment Analysis</option>
+                        <option value="keywords">Keyword Extraction</option>
+                        <option value="qa">Question & Answer</option>
+                        <option value="literary">Literary Analysis</option>
+                        <option value="language">Language Learning</option>
+                        <option value="honesty">Academic Integrity Check</option>
+                        <option value="flashcards">Study Flashcards</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span class="material-icons">help_outline</span>
+                        Follow Up Question
+                    </div>
+                    <textarea id="qaInput" placeholder="Enter your question or additional text..."></textarea>
+                </div>
+
+                <button class="analyze-btn" id="analyzeBtn" onclick="analyzeDocument()">
+                    Analyze your document
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-area">
+                <div class="brand-section" id="brandSection">
+                    <div class="brand-title-container">
+                        <img src="Auralis.png" alt="Auralis" class="brand-title-logo">
+                        <div class="brand-title">Auralis</div>
+                    </div>
+                    <div class="brand-subtitle">The output will be shown here after all the steps are complete.</div>
+                </div>
+
+                <div id="analysisContainer" class="analysis-container">
+                    <div id="status" class="status-indicator" style="display: none;">
+                        <span id="status-text">Ready to analyze</span>
+                        <div class="loading-bar" id="loadingBar" style="display: none;">
+                            <div class="loading-bar-fill" id="loadingBarFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons" id="actionButtons" style="display: none;">
+                        <button class="action-btn show-analysis-btn" onclick="showAnalysisModal()">
+                            <span class="material-icons">visibility</span>
+                            Show Full Analysis
+                        </button>
+                        <div class="export-dropdown-container">
+                            <button class="export-btn" onclick="toggleExportDropdown()">
+                                <span class="material-icons">download</span>
+                                Export
+                            </button>
+                            <div class="export-dropdown" id="exportDropdown">
+                                <div class="export-option" onclick="exportAnalysis('text')">
+                                    <span class="material-icons">article</span>
+                                    Export as Text
+                                </div>
+                                <div class="export-option" onclick="exportAnalysis('pdf')">
+                                    <span class="material-icons">picture_as_pdf</span>
+                                    Export as PDF
+                                </div>
+                                <div class="export-option" onclick="exportAnalysis('json')">
+                                    <span class="material-icons">data_object</span>
+                                    Export as JSON
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-content" id="analysisContent" style="display: none;">
+                        Analysis will appear here...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extracted Text Modal -->
+    <div id="extractedModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons">text_snippet</span>
+                    Extracted Text
+                </div>
+                <button class="close-btn" onclick="closeExtractedModal()">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <textarea id="extractedTextarea" class="modal-textarea" placeholder="Extracted text will appear here..."></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="closeExtractedModal()">
+                    <span class="material-icons">close</span>
+                    Cancel
+                </button>
+                <button class="modal-btn save-btn" onclick="saveExtractedText()">
+                    <span class="material-icons">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Modal -->
+    <div id="analysisModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons">analytics</span>
+                    Full Analysis Results
+                </div>
+                <button class="close-btn" onclick="closeAnalysisModal()">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div id="fullAnalysisContent" class="analysis-content">
+                Analysis will appear here...
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span class="material-icons">check_circle</span>
+        <span id="notification-text"></span>
+    </div>
+
+    <script>
+        let currentAnalysis = '';
+        let extractedDocumentText = '';
+        let loadingProgress = 0;
+        let loadingInterval = null;
+
+        const notificationMessages = [
+            "Sweet! Now rocking {model}.",
+            "Boom! Switched to {model} power.",
+            "Nice choice! {model} is ready to roll.",
+            "Alright! {model} is in the driver's seat."
+        ];
+
+        // File input display update
+        document.getElementById("docxFile").addEventListener("change", function() {
+            const fileName = this.files[0] ? this.files[0].name : "Choose DOCX file...";
+            document.getElementById("file-name").textContent = fileName;
+            
+            // Reset extraction state when new file is selected
+            document.getElementById("viewExtractedBtn").classList.remove("visible");
+            document.getElementById("analyzeBtn").classList.remove("visible");
+            document.getElementById("extractMoreBtn").classList.remove("visible");
+            extractedDocumentText = '';
+        });
+
+        // Model selector notification
+        document.getElementById("modelSelector").addEventListener("change", function() {
+            const modelName = this.options[this.selectedIndex].text;
+            const messageIndex = Math.floor(Math.random() * notificationMessages.length);
+            const message = notificationMessages[messageIndex].replace('{model}', modelName);
+            showNotification(message);
+        });
+
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            const notificationText = document.getElementById("notification-text");
+            notificationText.textContent = message;
+            notification.classList.add("visible");
+            setTimeout(() => {
+                notification.classList.remove("visible");
+            }, 3000);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.querySelector('.hide-sidebar-btn');
+            const icon = btn.querySelector('.material-icons');
+            const text = btn.querySelector('span:last-child');
+            
+            sidebar.classList.toggle('hidden');
+            
+            if (sidebar.classList.contains('hidden')) {
+                icon.textContent = 'visibility';
+                text.textContent = 'Show Sliders';
+            } else {
+                icon.textContent = 'visibility_off';
+                text.textContent = 'Hide Sliders';
+            }
+        }
+
+        function startLoadingAnimation() {
+            const loadingBar = document.getElementById("loadingBar");
+            const loadingBarFill = document.getElementById("loadingBarFill");
+            loadingBar.style.display = 'block';
+            loadingProgress = 0;
+            loadingBarFill.style.width = '0%';
+            loadingInterval = setInterval(() => {
+                loadingProgress += 5;
+                if (loadingProgress >= 100) loadingProgress = 0;
+                loadingBarFill.style.width = `${loadingProgress}%`;
+            }, 100);
+        }
+
+        function stopLoadingAnimation() {
+            const loadingBar = document.getElementById("loadingBar");
+            const loadingBarFill = document.getElementById("loadingBarFill");
+            clearInterval(loadingInterval);
+            loadingBar.style.display = 'none';
+            loadingBarFill.style.width = '0%';
+        }
+
+        function updateStatus(text, type = 'info') {
+            const status = document.getElementById("status");
+            const statusText = document.getElementById("status-text");
+            const brandSection = document.getElementById("brandSection");
+            const analysisContainer = document.getElementById("analysisContainer");
+            
+            status.style.display = 'flex';
+            status.className = `status-indicator ${type}`;
+            statusText.textContent = text;
+            
+            // Show analysis container and hide brand section
+            brandSection.classList.add('hidden');
+            analysisContainer.classList.add('visible');
+            
+            if (type === 'processing') {
+                startLoadingAnimation();
+            } else {
+                stopLoadingAnimation();
+            }
+        }
+
+        async function extractDocument() {
+            const file = document.getElementById("docxFile").files[0];
+            
+            if (!file) {
+                updateStatus("Please select a DOCX file first", "error");
+                return;
+            }
+
+            updateStatus("Initializing document processor...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            updateStatus("Reading document structure...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 600));
+            
+            updateStatus("Auralis is parsing your document content...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 700));
+            
+            updateStatus("Auralis is now extracting text elements...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer });
+                extractedDocumentText = result.value.trim();
+                
+                if (extractedDocumentText) {
+                    updateStatus("Text extraction completed successfully", "success");
+                    document.getElementById("viewExtractedBtn").classList.add("visible");
+                    document.getElementById("analyzeBtn").classList.add("visible");
+                    document.getElementById("extractMoreBtn").classList.add("visible");
+                    
+                    setTimeout(() => {
+                        document.getElementById("status").style.display = 'none';
+                        document.getElementById("brandSection").classList.remove('hidden');
+                        document.getElementById("analysisContainer").classList.remove('visible');
+                    }, 2000);
+                } else {
+                    updateStatus("No text content found in document", "error");
+                }
+            } catch (err) {
+                updateStatus("Error processing document: " + err.message, "error");
+            }
+        }
+
+        function showExtractedModal() {
+            document.getElementById('extractedTextarea').value = extractedDocumentText;
+            document.getElementById('extractedModal').style.display = 'flex';
+        }
+
+        function closeExtractedModal() {
+            document.getElementById('extractedModal').style.display = 'none';
+        }
+
+        function saveExtractedText() {
+            extractedDocumentText = document.getElementById('extractedTextarea').value;
+            closeExtractedModal();
+        }
+
+        function formatAIResponse(text) {
+            let formatted = text.replace(/^##\s*(.+)$/gm, '<h3>$1</h3>');
+            formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>');
+            return formatted;
+        }
+
+        function parseFlashcards(text) {
+            const flashcards = [];
+            const sections = text.split('\n\n');
+            let currentCard = null;
+
+            for (const section of sections) {
+                const lines = section.split('\n');
+                for (const line of lines) {
+                    if (line.startsWith('Q: ')) {
+                        if (currentCard) flashcards.push(currentCard);
+                        currentCard = { question: line.replace('Q: ', '').trim(), answer: '' };
+                    } else if (line.startsWith('A: ') && currentCard) {
+                        currentCard.answer = line.replace('A: ', '').trim();
+                    }
+                }
+            }
+
+            if (currentCard && currentCard.answer) flashcards.push(currentCard);
+            return flashcards;
+        }
+
+        function renderFlashcards(flashcards) {
+            const container = document.getElementById('analysisContent');
+            container.innerHTML = '<div class="flashcard-container"></div>';
+            const flashcardContainer = container.querySelector('.flashcard-container');
+
+            if (flashcards.length === 0) {
+                container.innerHTML = '<p>No valid flashcards found in the response.</p>';
+                return;
+            }
+
+            flashcards.forEach((card, index) => {
+                const flashcard = document.createElement('div');
+                flashcard.className = 'flashcard';
+                flashcard.innerHTML = `
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">${card.question}</div>
+                        <div class="flashcard-back">${card.answer}</div>
+                    </div>
+                `;
+                flashcard.addEventListener('click', () => {
+                    flashcard.classList.toggle('flipped');
+                });
+                flashcardContainer.appendChild(flashcard);
+            });
+        }
+
+        function renderIntegrityGraph(humanPercent, aiPercent, otherPercent) {
+            const container = document.getElementById('analysisContent');
+            const total = humanPercent + aiPercent + otherPercent;
+            const humanAngle = (humanPercent / total) * 100;
+            const aiAngle = humanAngle + (aiPercent / total) * 100;
+
+            container.innerHTML = `
+                <div class="integrity-graph" style="--human-percent: ${humanAngle}%; --ai-percent: ${aiAngle}%">
+                    <div class="integrity-circle"></div>
+                    <div class="integrity-circle-inner">Integrity Score</div>
+                </div>
+                <div class="integrity-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: rgb(63, 159, 255)"></div>
+                        Human: ${humanPercent}%
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: rgb(255, 77, 156)"></div>
+                        AI: ${aiPercent}%
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: rgb(156, 77, 255)"></div>
+                        Other?: ${otherPercent}%
+                        <span class="tooltip">"Other" includes content that cannot be definitively classified as human or AI-generated, such as common phrases, boilerplate text, or external references.</span>
+                    </div>
+                </div>
+                <div class="result-content" style="margin-top: 20px">${formatAIResponse(currentAnalysis)}</div>
+            `;
+        }
+
+        function toggleExportDropdown() {
+            const dropdown = document.getElementById('exportDropdown');
+            dropdown.classList.toggle('visible');
+        }
+
+        async function analyzeDocument() {
+            const task = document.getElementById("task").value;
+            const question = document.getElementById("qaInput").value;
+            const model = document.getElementById("modelSelector").value;
+
+            let text = question.trim();
+            if (extractedDocumentText) {
+                text = extractedDocumentText + (text ? '\n\n' + text : '');
+            }
+
+            if (!text) {
+                updateStatus("Please extract text or enter content for analysis", "error");
+                return;
+            }
+
+            updateStatus("Initializing nexora...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            updateStatus("Loading analysis models...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 600));
+            
+            updateStatus("Cooperating with nexora...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 700));
+            
+            updateStatus("Performing deep semantic analysis...", "processing");
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            updateStatus("Generating comprehensive insights...", "processing");
+
+            let prompt = "You are Auralis, an advanced NLP analysis tool. Provide a comprehensive, detailed, and well-structured response. Use clear sections with ## for subtitles and **text** for emphasis.\n\n";
+            switch (task) {
+                case "summarize":
+                    prompt += `Generate a comprehensive and detailed summary of the following document. Include key points, main themes, and important details:\n\n${text}`;
+                    break;
+                case "sentiment":
+                    prompt += `Perform a thorough sentiment analysis of the following document. Provide detailed insights about emotions, tone, and sentiment patterns:\n\n${text}`;
+                    break;
+                case "keywords":
+                    prompt += `Extract and analyze the most significant keywords and key phrases from the following document. Provide detailed explanations of their relevance and context:\n\n${text}`;
+                    break;
+                case "qa":
+                    prompt += `Answer the following question based on the provided document. Provide a comprehensive and detailed response with supporting evidence:\nQuestion: ${question}\n\nDocument:\n${text}`;
+                    break;
+                case "literary":
+                    prompt += `Conduct a comprehensive literary analysis of the following document. Analyze style, themes, literary devices, and deeper meanings:\n\n${text}`;
+                    break;
+                case "language":
+                    prompt += `Create a detailed language learning guide based on the following document. Include vocabulary, grammar analysis, and educational insights:\n\n${text}`;
+                    break;
+                case "honesty":
+                    prompt += `Perform a thorough academic integrity evaluation of the following document. Analyze for originality, potential issues, and provide detailed recommendations. Include percentage scores for Human Content, AI-Generated Content, and Other Sources:\n\n${text}`;
+                    break;
+                case "flashcards":
+                    prompt += `Generate comprehensive study flashcards based on the key concepts in the following document. Create detailed Q&A pairs covering all important topics. Format each flashcard as:\nQ: [Question]\nA: [Answer]\n\n${text}`;
+                    break;
+            }
+
+            try {
+                const response = await fetch("https://api.fireworks.ai/inference/v1/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer fw_3ZWXAxAD6BWE4pgQkvkAqem3",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        prompt: prompt,
+                        max_tokens: 2048,
+                        temperature: 0.7,
+                        top_p: 0.9
+                    })
+                });
+
+                const raw = await response.text();
+                try {
+                    const data = JSON.parse(raw);
+                    const output = data.choices?.[0]?.text?.trim() || "⚠️ No valid response received.";
+                    currentAnalysis = output;
+                    
+                    updateStatus("Analysis completed successfully", "success");
+                    
+                    // Show results
+                    const analysisContent = document.getElementById("analysisContent");
+                    analysisContent.style.display = 'block';
+                    if (task === 'flashcards') {
+                        const flashcards = parseFlashcards(output);
+                        renderFlashcards(flashcards);
+                    } else if (task === 'honesty') {
+                        // Example percentages; parse from output in real implementation
+                        const humanPercent = 70;
+                        const aiPercent = 20;
+                        const otherPercent = 10;
+                        renderIntegrityGraph(humanPercent, aiPercent, otherPercent);
+                    } else {
+                        analysisContent.innerHTML = formatAIResponse(output);
+                    }
+
+                    document.getElementById("actionButtons").style.display = 'flex';
+                    
+                } catch (parseErr) {
+                    updateStatus("Error parsing Auralis response", "error");
+                    document.getElementById("analysisContent").textContent = "❌ Error parsing response:\n" + raw;
+                    document.getElementById("analysisContent").style.display = 'block';
+                }
+
+            } catch (err) {
+                updateStatus("Error connecting to Corea Starstroupe service", "error");
+                document.getElementById("analysisContent").textContent = "❌ Error: " + err.message;
+                document.getElementById("analysisContent").style.display = 'block';
+            }
+        }
+
+        function showAnalysisModal() {
+            document.getElementById('fullAnalysisContent').innerHTML = formatAIResponse(currentAnalysis);
+            document.getElementById('analysisModal').style.display = 'flex';
+        }
+
+        function closeAnalysisModal() {
+            document.getElementById('analysisModal').style.display = 'none';
+        }
+
+        function exportAnalysis(format) {
+            const content = currentAnalysis || 'No analysis available.';
+
+            if (format === 'text') {
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Auralis_Analysis.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            } else if (format === 'pdf') {
+                const element = document.createElement('div');
+                element.innerHTML = formatAIResponse(content);
+                element.style.padding = '20px';
+                element.style.background = '#ffffff';
+                element.style.color = '#000000';
+                element.style.fontFamily = "'Google Sans', sans-serif";
+                element.style.fontSize = '14px';
+                element.style.lineHeight = '1.6';
+                html2pdf().from(element).set({
+                    margin: 1,
+                    filename: 'Auralis_Analysis.pdf',
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                }).save();
+            } else if (format === 'json') {
+                const jsonContent = {
+                    analysis: content,
+                    timestamp: new Date().toISOString(),
+                    task: document.getElementById("task").value,
+                    model: document.getElementById("modelSelector").value
+                };
+                const blob = new Blob([JSON.stringify(jsonContent, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Auralis_Analysis.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+            toggleExportDropdown();
+        }
+
+        // Close modals and dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('exportDropdown');
+            const exportBtn = document.querySelector('.export-btn');
+            if (!exportBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('visible');
+            }
+
+            const modals = document.querySelectorAll('.modal-overlay');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
