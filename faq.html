@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Project Mindmesh - Corea Starstroupe</title>
+    <link rel="icon" href="Credits.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        /* Article Content */
+        .article {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 32px;
+            text-align: left;
+        }
+
+        .article h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .article h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 16px;
+            text-align: left;
+        }
+
+        .article p {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article ul {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 400;
+            color: #aaa;
+            line-height: 1.6;
+            margin: 16px 0 24px;
+            padding-left: 24px;
+            text-align: justify;
+        }
+
+        .article ul li {
+            margin-bottom: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            background: #111;
+            padding: 40px 32px;
+            text-align: center;
+            border-top: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .footer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* Background grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.02;
+            background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .logo-main {
+                font-size: 28px;
+            }
+
+            .logo-sub {
+                font-size: 14px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .article {
+                margin: 100px auto 40px;
+                padding: 0 20px;
+            }
+
+            .article h1 {
+                font-size: clamp(28px, 5vw, 36px);
+            }
+
+            .article h2 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .article p, .article ul {
+                font-size: clamp(14px, 2vw, 16px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .logo-sub {
+                font-size: 12px;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .article {
+                margin: 80px auto 32px;
+                padding: 0 16px;
+            }
+
+            .article h1 {
+                font-size: clamp(24px, 5vw, 32px);
+            }
+
+            .article h2 {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .article p, .article ul {
+                font-size: clamp(13px, 2vw, 15px);
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+        }
+
+#colorchange {
+  font-size: clamp(48px, 10vw, 64px);
+  font-weight: bold;
+  background: linear-gradient(to right, #ff69b4, #03a9f4, #ff69b4); /* pink → blue → pink */
+  background-size: 200% 100%;
+  background-position: left center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-align: center;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.7s ease-in-out;
+}
+
+#colorchange:hover {
+  background-position: right center;
+}
+
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="Credits.png" alt="Logo" />
+                <div class="logo-text">
+                    <div class="logo-main"><strong>COREA</strong></div>
+                    <div class="logo-sub">STARSTROUPE</div>
+                </div>
+            </a>
+        </header>
+
+        <article class="article">
+            <h1 id="colorchange">Frequently Asked Questions</h1>
+            
+            <h2>What is COREA Starstroupe?</h2>
+            <p>COREA Starstroupe is a creative, student-led tech initiative developed by Ron Asnahon and his helper Carl John Arpay during their Grade 12 year. It started as a fun passion project — a space to explore future-forward ideas in AI, design, and human-tech interaction. The name reflects our curiosity, ambition, and love for technology.</p>
+            
+            <h2>What is Project Mindmesh?</h2>
+            <p>Project Mindmesh is our flagship concept — a vision for how people and machines could interact more naturally. It’s a framework built around AI, emotion-aware systems, and intuitive technology that understands you — not just what you say. While it’s an ambitious idea, it began as something we simply wanted to dream up and share.</p>
+            
+            <h2>Who made this website?</h2>
+            <p>This site was made mostly by Ron Asnahon and Carl John Arpay, built from scratch during our Grade 12 year (S.Y. 2024-2025). It was a mix of late nights, code experiments, and lots of coffee. We're proud that it reflects our creativity, teamwork, and tech passion.</p>
+            
+            <h2>Is this project for school?</h2>
+            <p>Nope — not for school! We did this for fun and passion. COREA Starstroupe was our way of doing something cool outside the classroom — learning web development, AI concepts, and creative design by actually building something.</p>
+            
+            <h2>Is Project Mindmesh real or just a concept?</h2>
+            <p>It's a concept right now, but parts of it are rooted in real technology ideas — like conversational interfaces, adaptive AI, and open-source platforms. Our goal was to imagine something futuristic but still possible, and maybe one day even build it for real.</p>
+            
+            <h2>Is COREA Starstroupe a real company?</h2>
+            <p>Not officially — COREA Starstroupe is a creative identity, not a registered company (yet). Think of it as our tech brand or sandbox for building, imagining, and experimenting. We’re open to sharing ideas and maybe turning COREA into a community-driven platform later on. If you’re into tech, design, or creative problem-solving — stay tuned.</p>
+            
+            <h2>Can people contribute or join?</h2>
+            <p>We’d love that in the future! For now, it’s a closed project between us, but we’re open to sharing ideas and maybe turning COREA into a community-driven platform later on. If you’re into tech, design, or creative problem-solving — stay tuned.</p>
+            
+            <h2>Why the name “COREA Starstroupe”?</h2>
+            <p>“COREA” stands for Cognitive Operating and Responsive Engagement Architecture (yes, we made that up 😅), and “Starstroupe” represents a team reaching for the stars — dreaming big with tech. It’s weird, unique, and we love it.</p>
+            
+            <h2>What’s next for COREA Starstroupe?</h2>
+            <p>We don’t know for sure — but we’re excited to keep learning, building, and creating. Whether that means making games, apps, or diving deeper into AI, we want COREA to grow with us.</p>
+            
+            <h2>Is this open-source?</h2>
+            <p>Yes! Project Mindmesh is imagined as an open-source project — meaning that anyone could use, build, or contribute to it if it ever becomes real. We believe in free access to tech and learning.</p>
+            
+            <h2>Just for fun?</h2>
+            <p>Yup — all of this was just for fun, learning, and creativity. No deadlines, no grades — just our imagination and drive to explore what’s possible with code and design.</p>
+        </article>
+    </div>
+
+    <footer class="footer">
+        <video autoplay muted loop>
+            <source src="water.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer-content">
+            <p>© 2025 COREA Starstroupe. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="privacy-policy">Privacy Policy</a>
+                <a href="terms-of-service">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
