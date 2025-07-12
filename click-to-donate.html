@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click to Help - Starstroupe Initiative</title>
+    <link rel="icon" href="Core.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, updateDoc, increment, onSnapshot, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCB1DwFSwQLDOlUFtWQtUvqOWPnI1HrP5E",
+            authDomain: "messenger-7c40c.firebaseapp.com",
+            projectId: "messenger-7c40c",
+            storageBucket: "messenger-7c40c.firebasestorage.app",
+            messagingSenderId: "435817942279",
+            appId: "1:435817942279:web:36b3f65e6358d8aa0a49a2",
+            measurementId: "G-HJ094HC4F2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // Make Firebase functions globally available
+        window.db = db;
+        window.doc = doc;
+        window.updateDoc = updateDoc;
+        window.increment = increment;
+        window.onSnapshot = onSnapshot;
+        window.setDoc = setDoc;
+        window.getDoc = getDoc;
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #000000;
+            color: white;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav-container {
+            background-color: #000000;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-text-top {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo-text-bottom {
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.7;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .content-section {
+            background-color: #000000;
+            padding: 40px;
+            border-radius: 8px;
+        }
+
+        .main-heading {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .free-text {
+            color: white;
+        }
+
+        .click-button {
+            display: block;
+            width: 400px;
+            margin: 0 auto 30px;
+            background-color: white;
+            color: black;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 32px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .click-button:hover {
+            background-color: black;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .click-button:active {
+            transform: translateY(0);
+        }
+
+        .click-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .click-button:disabled:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .click-icon {
+            font-size: 40px;
+        }
+
+        .click-counter {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .proceeds-text {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: white;
+        }
+
+        .ai-cause {
+            color: white;
+            font-weight: 600;
+        }
+
+        .verify-link {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .checkmark {
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            color: black;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .description-heading {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            margin: 30px 0 15px;
+        }
+
+        .description-text {
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .learn-more {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid white;
+        }
+
+        .accordion-item:first-child {
+            border-top: 1px solid white;
+        }
+
+        .accordion-header {
+            background: transparent;
+            color: white;
+            padding: 20px 0;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .accordion-header:hover {
+            opacity: 0.7;
+        }
+
+        .accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+        }
+
+        .accordion-content.active {
+            max-height: 1000px;
+            padding: 0 0 20px 0;
+        }
+
+        .accordion-text {
+            color: white;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .accordion-list {
+            color: white;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .accordion-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Global Stats - MASSIVE AND HORIZONTAL within Sidebar */
+        .global-stats {
+            background-color: black;
+            padding: 30px; /* Adjusted padding for sidebar */
+            border-radius: 8px; /* Adjusted border-radius for sidebar */
+            text-align: center;
+            margin-bottom: 30px; /* Space below it in sidebar */
+            display: flex;
+            flex-direction: column; /* Keep title above stats */
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Take full width of sidebar */
+        }
+
+        .stats-title {
+            font-size: 24px; /* Slightly smaller for sidebar */
+            font-weight: 800;
+            color: white;
+            margin-bottom: 30px; /* Adjusted margin */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stats-grid {
+            display: flex;
+            flex-direction: row; /* Horizontal layout */
+            justify-content: space-around; /* Distribute items with space around them */
+            align-items: center;
+            width: 100%; /* Take full width to spread out */
+            gap: 10px; /* Minimum gap, space-around will add more */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Adjusted gap */
+            flex: 1; /* Allow items to grow and shrink */
+            min-width: 100px; /* Ensure items don't get too small */
+        }
+
+        .stat-icon {
+            font-size: 36px; /* Slightly smaller for sidebar */
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 36px; /* Slightly smaller for sidebar */
+            font-weight: 900;
+            color: white;
+            font-family: 'Google Sans', monospace;
+            animation: pulse 2s infinite;
+        }
+
+        .stat-label {
+            font-size: 14px; /* Slightly smaller for sidebar */
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-number.animate {
+            animation: countUp 0.5s ease-out;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #000000;
+            padding: 30px;
+            border-radius: 8px;
+            height: fit-content;
+            display: flex; /* Use flexbox for sidebar content */
+            flex-direction: column; /* Stack items vertically */
+            gap: 30px; /* Space between global stats and mission links */
+        }
+
+        .sidebar-heading {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .mission-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+        }
+
+        .mission-item:hover {
+            background-color: #111;
+            transform: translateX(5px);
+        }
+
+        .mission-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            background-color: black;
+        }
+
+        .mission-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .mission-info p {
+            font-size: 12px;
+            color: white;
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background-color: #000000;
+            padding: 60px 20px 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-section p, .footer-section li {
+            color: white;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-section a:hover {
+            opacity: 0.7;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Daily limit message */
+        .daily-limit {
+            text-align: center;
+            color: white;
+            font-weight: 500;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px 10px;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                gap: 20px;
+            }
+
+            .click-button {
+                width: 100%;
+                font-size: 24px;
+            }
+
+            .main-heading {
+                font-size: 28px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .global-stats {
+                padding: 20px; /* Adjusted padding for smaller screens */
+            }
+
+            .stats-grid {
+                flex-direction: column; /* Stack vertically on small screens */
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 36px;
+            }
+
+            .stats-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="nav-container">
+        <div class="logo">
+            <img src="Core.png" alt="Logo" class="logo-image">
+            <div class="logo-text">
+                <div class="logo-text-top">STARSTROUPE</div>
+                <div class="logo-text-bottom">INITIATIVE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content-section">
+            <h1 class="main-heading">
+                Click Daily, <span class="free-text">it's FREE</span>
+            </h1>
+            
+            <div class="click-counter">
+                Today's Clicks: <span id="clickCount">0</span> / 1
+            </div>
+
+            <button id="clickButton" class="click-button">
+                <span class="material-icons click-icon">touch_app</span>
+                CLICK TO HELP
+            </button>
+
+            <div class="daily-limit" id="dailyLimit">
+                <span class="material-icons">check_circle</span>
+                Thank you! Come back tomorrow to help again.
+            </div>
+
+            <p class="proceeds-text">
+                All proceeds go to <span class="ai-cause">our mission and initiatives</span><br>
+            </p>
+
+            <h2 class="description-heading">Your click helps make AI accessible to everyone</h2>
+            
+            <p class="description-text">
+                Your free click generates donations from our sponsors. Remember, you may click once a day, every day. Donations raised go directly to <strong>AI accessibility initiatives</strong> to ensure AI tools and education reach everyone, regardless of their economic situation. <a href="#" class="learn-more">Learn more</a>
+            </p>
+
+            <!-- Detailed Accordion -->
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>How does this work?</span>
+                        <span class="material-icons">expand_more</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="accordion-text">
+                            Our platform operates on a simple yet powerful model that transforms your daily clicks into meaningful support for AI accessibility worldwide.
+                        </p>
+                        <p class="accordion-text">
+                            <strong>The Click-to-Donate Model:</strong>
+                        </p>
+                        <ul class="accordion-list">
+                            <li>Each click you make generates revenue from our advertising partners</li>
+                            <li>100% of advertising revenue goes directly to AI accessibility programs</li>
+                            <li>We limit clicks to once per day to ensure sustainable funding</li>
+                            <li>Your IP address is tracked to prevent multiple clicks (privacy-focused)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>Where does the money go?</span>
+                        <span class="material-icons">expand_more</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="accordion-text">
+                            Every dollar raised through your clicks is allocated to specific AI accessibility initiatives:
+                        </p>
+                        <ul class="accordion-list">
+                            <li><strong>40% - Free Education:</strong> Developing and maintaining free AI courses, tutorials, and certification programs</li>
+                            <li><strong>30% - Open Source AI Tools:</strong> Funding development of free AI software and applications</li>
+                            <li><strong>20% - Hardware Access:</strong> Providing computing resources and hardware to underserved communities</li>
+                            <li><strong>10% - Platform Operations:</strong> Maintaining this platform and ensuring transparency</li>
+                        </ul>
+                        <p class="accordion-text">
+                            All financial reports are published quarterly and available for public review.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>Who are our sponsors?</span>
+                        <span class="material-icons">expand_more</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="accordion-text">
+                            As of now, we don't have sponsors for this movement but we are currently seeking partnerships with organizations that share our vision. Our ideal sponsors include: 
+                        </p>
+                        <ul class="accordion-list">
+                            <li><strong>OpenAI Labs</strong></li>
+                            <li><strong>Doble Klaire</strong> </li>
+                            <li><strong>Non-Profit Organizations - SME</strong></li>
+                            <li><strong>Individual Donors</strong></li>
+                        </ul>
+                        <p class="accordion-text">
+                            All sponsors are vetted to ensure they align with our mission of making giving the world a change.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>How can I get more involved?</span>
+                        <span class="material-icons">expand_more</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="accordion-text">
+                            Beyond your daily click, there are many ways to support our mission:
+                        </p>
+                        <ul class="accordion-list">
+                            <li><strong>Share the Platform:</strong> Tell friends and family about our cause</li>
+                            <li><strong>Social Media:</strong> Follow and share our content to spread awareness</li>
+                            <li><strong>Volunteer:</strong> Help translate content or create educational materials</li>
+                            <li><strong>Corporate Partnerships:</strong> Connect us with potential sponsors</li>
+                            <li><strong>Direct Donations:</strong> Make additional contributions if you're able</li>
+                            <li><strong>Feedback:</strong> Help us improve by sharing your suggestions</li>
+                        </ul>
+                        <p class="accordion-text">
+                            Together, we can ensure that AI becomes a tool for empowerment rather than exclusion.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <!-- MASSIVE Global Stats Section - MOVED HERE -->
+            <div class="global-stats">
+                <h2 class="stats-title">STATISTICS</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="material-icons stat-icon">diversity_2</span>
+                        <div class="stat-number" id="globalClicks">0</div>
+                        <div class="stat-label">Global Clicks</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="material-icons stat-icon">today</span>
+                        <div class="stat-number" id="todayClicks">0</div>
+                        <div class="stat-label">Today</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="material-icons stat-icon">ads_click</span>
+                        <div class="stat-number" id="clicksPerSecond">0.0</div>
+                        <div class="stat-label">Clicks/sec</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="sidebar-heading">Learn more about our mission</h3>
+            
+            <a href="https://www.coursera.org/courses?query=artificial%20intelligence" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">school</span>
+                </div>
+                <div class="mission-info">
+                    <h4>Free AI Courses</h4>
+                    <p>Access thousands of free AI learning resources</p>
+                </div>
+            </a>
+
+            <a href="https://github.com/topics/artificial-intelligence" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">code</span>
+                </div>
+                <div class="mission-info">
+                    <h4>Open Source AI Tools</h4>
+                    <p>Contribute to free AI development projects</p>
+                </div>
+            </a>
+
+            <a href="https://www.kaggle.com/learn" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">analytics</span>
+                </div>
+                <div class="mission-info">
+                    <h4>Data Science Learning</h4>
+                    <p>Free machine learning and data science courses</p>
+                </div>
+            </a>
+
+            <a href="https://www.tensorflow.org/learn" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">psychology</span>
+                </div>
+                <div class="mission-info">
+                    <h4>TensorFlow Education</h4>
+                    <p>Learn AI development with Google's framework</p>
+                </div>
+            </a>
+
+            <a href="https://www.fast.ai/" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">rocket_launch</span>
+                </div>
+                <div class="mission-info">
+                    <h4>Fast.ai Courses</h4>
+                    <p>Practical deep learning for coders</p>
+                </div>
+            </a>
+
+            <a href="https://www.edx.org/learn/artificial-intelligence" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">library_books</span>
+                </div>
+                <div class="mission-info">
+                    <h4>University AI Programs</h4>
+                    <p>Free AI courses from top universities</p>
+                </div>
+            </a>
+
+            <a href="https://huggingface.co/learn" target="_blank" class="mission-item">
+                <div class="mission-logo">
+                    <span class="material-icons">face</span>
+                </div>
+                <div class="mission-info">
+                    <h4>Hugging Face Hub</h4>
+                    <p>Free AI models and learning resources</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Our Mission</h3>
+                <p>Making the world a better place, through software we will help fight poverty and inequality.</p>
+                <p>Every click you make brings us closer to a world where everyone has access to the tools and knowledge they need to succeed in their daily lives, regardless of background or economic situation.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Get Involved</h3>
+                <ul>
+                    <li><a href="#">Volunteer Opportunities</a></li>
+                    <li><a href="#">Corporate Partnerships</a></li>
+                    <li><a href="#">Translate Content</a></li>
+                    <li><a href="#">Share Our Mission</a></li>
+                    <li><a href="#">Direct Donations</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">Newsletter Signup</a></li>
+                    <li><a href="#">Social Media</a></li>
+                    <li><a href="#">Community Forum</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                    <li><a href="#">Report Issues</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 COREA STARSTROUPE. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase integration and click tracking
+        let globalClicks = 0;
+        let todayClicks = 0;
+        let clicksPerSecond = 0;
+        let lastUpdateTime = Date.now();
+
+        // DOM elements
+        const clickButton = document.getElementById('clickButton');
+        const clickCountElement = document.getElementById('clickCount');
+        const dailyLimitElement = document.getElementById('dailyLimit');
+        const globalClicksElement = document.getElementById('globalClicks');
+        const todayClicksElement = document.getElementById('todayClicks');
+        const clicksPerSecondElement = document.getElementById('clicksPerSecond');
+
+        // Initialize Firebase data
+        async function initializeFirebaseData() {
+            try {
+                const statsRef = window.doc(window.db, 'stats', 'global');
+                const statsSnap = await window.getDoc(statsRef);
+                
+                if (!statsSnap.exists()) {
+                    // Initialize with 0 if document doesn't exist
+                    await window.setDoc(statsRef, {
+                        totalClicks: 0,
+                        todayClicks: 0,
+                        lastResetDate: new Date().toDateString()
+                    });
+                    globalClicks = 0;
+                    todayClicks = 0;
+                } else {
+                    const data = statsSnap.data();
+                    globalClicks = data.totalClicks || 0;
+                    
+                    // Check if it's a new day
+                    const today = new Date().toDateString();
+                    if (data.lastResetDate !== today) {
+                        // Reset today's clicks for new day
+                        await window.updateDoc(statsRef, {
+                            todayClicks: 0,
+                            lastResetDate: today
+                        });
+                        todayClicks = 0;
+                    } else {
+                        todayClicks = data.todayClicks || 0;
+                    }
+                }
+
+                // Update display
+                animateNumber(globalClicksElement, globalClicks);
+                animateNumber(todayClicksElement, todayClicks);
+
+                // Listen for real-time updates
+                window.onSnapshot(statsRef, (doc) => {
+                    if (doc.exists()) {
+                        const data = doc.data();
+                        const newGlobalClicks = data.totalClicks || 0;
+                        const newTodayClicks = data.todayClicks || 0;
+                        
+                        // Only animate if the number actually changed
+                        if (newGlobalClicks !== globalClicks) {
+                            animateNumber(globalClicksElement, newGlobalClicks);
+                            globalClicks = newGlobalClicks;
+                        }
+                        
+                        if (newTodayClicks !== todayClicks) {
+                            animateNumber(todayClicksElement, newTodayClicks);
+                            todayClicks = newTodayClicks;
+                        }
+
+                        // Calculate clicks per second
+                        const now = Date.now();
+                        const timeDiff = (now - lastUpdateTime) / 1000;
+                        if (timeDiff > 0) {
+                            // This calculation is more for visual effect, actual CPS would need more complex tracking
+                            clicksPerSecond = ((newGlobalClicks - globalClicks) / timeDiff).toFixed(1);
+                            animateNumber(clicksPerSecondElement, clicksPerSecond);
+                        }
+                        lastUpdateTime = now;
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error initializing Firebase data:', error);
+                // Fallback to local storage if Firebase fails
+                globalClicks = parseInt(localStorage.getItem('globalClicks') || '0');
+                todayClicks = parseInt(localStorage.getItem('todayClicks') || '0');
+                animateNumber(globalClicksElement, globalClicks);
+                animateNumber(todayClicksElement, todayClicks);
+            }
+        }
+
+        // Animate number changes
+        function animateNumber(element, targetNumber) {
+            element.classList.add('animate');
+            element.textContent = targetNumber.toLocaleString();
+            setTimeout(() => {
+                element.classList.remove('animate');
+            }, 500);
+        }
+
+        // Simulate real-time clicks per second updates (more for visual effect)
+        function updateClicksPerSecondDisplay() {
+            const randomRate = (Math.random() * 2 + 0.5).toFixed(1); // Random rate between 0.5 and 2.5
+            animateNumber(clicksPerSecondElement, randomRate);
+        }
+
+        // Check if user has already clicked today
+        const today = new Date().toDateString();
+        const lastClickDate = localStorage.getItem('lastClickDate');
+        const hasClickedToday = lastClickDate === today;
+
+        // Initialize click count
+        let clickCount = hasClickedToday ? 1 : 0;
+        clickCountElement.textContent = clickCount;
+
+        if (hasClickedToday) {
+            clickButton.disabled = true;
+            dailyLimitElement.style.display = 'block';
+        }
+
+        // Handle click button
+        clickButton.addEventListener('click', async function() {
+            if (!hasClickedToday && clickCount === 0) {
+                clickCount = 1;
+                clickCountElement.textContent = clickCount;
+
+                try {
+                    // Update Firebase
+                    const statsRef = window.doc(window.db, 'stats', 'global');
+                    await window.updateDoc(statsRef, {
+                        totalClicks: window.increment(1),
+                        todayClicks: window.increment(1),
+                        lastResetDate: new Date().toDateString()
+                    });
+                } catch (error) {
+                    console.error('Error updating Firebase:', error);
+                    // Fallback to local storage
+                    globalClicks += 1;
+                    todayClicks += 1;
+                    localStorage.setItem('globalClicks', globalClicks.toString());
+                    localStorage.setItem('todayClicks', todayClicks.toString());
+                    animateNumber(globalClicksElement, globalClicks);
+                    animateNumber(todayClicksElement, todayClicks);
+                }
+
+                // Store today's date
+                localStorage.setItem('lastClickDate', today);
+
+                // Disable button
+                clickButton.disabled = true;
+
+                // Show daily limit message
+                dailyLimitElement.style.display = 'block';
+
+                // Add click animation
+                clickButton.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    clickButton.style.transform = 'translateY(0)';
+                }, 150);
+            }
+        });
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.material-icons');
+
+                // Close all other accordions
+                accordionHeaders.forEach(otherHeader => {
+                    if (otherHeader !== this) {
+                        otherHeader.classList.remove('active');
+                        otherHeader.nextElementSibling.classList.remove('active');
+                        otherHeader.querySelector('.material-icons').textContent = 'expand_more';
+                    }
+                });
+
+                // Toggle current accordion
+                this.classList.toggle('active');
+                content.classList.toggle('active');
+
+                if (content.classList.contains('active')) {
+                    icon.textContent = 'expand_less';
+                } else {
+                    icon.textContent = 'expand_more';
+                }
+            });
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Firebase to be available
+            setTimeout(() => {
+                if (window.db) {
+                    initializeFirebaseData();
+                }
+            }, 1000);
+        });
+
+        // Update clicks per second display every 3 seconds
+        setInterval(updateClicksPerSecondDisplay, 3000);
+
+        // Reset at midnight
+        function checkForNewDay() {
+            const currentDate = new Date().toDateString();
+            if (lastClickDate && lastClickDate !== currentDate) {
+                localStorage.removeItem('lastClickDate');
+                location.reload();
+            }
+        }
+
+        // Check every minute for new day
+        setInterval(checkForNewDay, 60000);
+    </script>
+</body>
+</html>
